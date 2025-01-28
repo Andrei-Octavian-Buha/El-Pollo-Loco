@@ -5,6 +5,7 @@ class World {
   ctx;
   keyboard;
   camera_x = 150;
+  statusBar = new StatusBar();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -24,6 +25,7 @@ class World {
       this.level.enemies.forEach((enemy)=>{
         if(this.character.isColliding(enemy)){
             this.character.hit();
+            this.statusBar.setPertange(this.character.health);
             console.log("Health", this.character.health);
         }
       })
@@ -37,8 +39,8 @@ class World {
     this.addObjectsToMap(this.level.clouds);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
-
     this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusBar);
     //draw wird immer wieder aufgerufen
     let self = this;
     requestAnimationFrame(function () {
