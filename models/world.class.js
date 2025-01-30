@@ -5,7 +5,7 @@ class World {
   ctx;
   keyboard;
   camera_x = 150;
-  statusBar = new StatusBar();
+  statusBar = [new HealthBar(), new BottleLootBar()];
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -14,12 +14,24 @@ class World {
     this.draw();
     this.setWorld();
     this.checkCollisions();
+    this.checkBotleLoot();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
+  checkBotleLoot(){
+    setInterval(() => {
+      this.level.loot.forEach((botle)=>{
+        if(this.character.isColliding(botle)){
+            this.character.botleLoot++
+            console.log("Ai adunat", this.character.botleLoot);
+            botle.y = -100;
+        }
+      })
+    }, 200);
+  }
   checkCollisions(){
     setInterval(() => {
       this.level.enemies.forEach((enemy)=>{
@@ -37,10 +49,11 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.loot);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
+    this.addObjectsToMap(this.statusBar);
     //draw wird immer wieder aufgerufen
     let self = this;
     requestAnimationFrame(function () {

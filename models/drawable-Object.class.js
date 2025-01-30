@@ -33,7 +33,7 @@ class DrawableObject{
         }
       }
       drawFrameOffset(ctx) { 
-        if(this instanceof Character || this instanceof Chicken || this instanceof Endboss){
+        if(this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof BotleLoot){
             ctx.beginPath();
             ctx.lineWidth = "3";
             ctx.strokeStyle = 'red'; // Poți schimba culoarea

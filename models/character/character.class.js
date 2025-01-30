@@ -6,7 +6,7 @@ class Character extends MovableObject {
   
   speed = 10;
   health = 100;
-
+  botleLoot = 0;
   currentImage = 0;
 
   offset = {
@@ -39,8 +39,8 @@ class Character extends MovableObject {
 
   IMAGES_HURT = [
     "img/2_character_pepe/4_hurt/H-41.png",
-    "img/2_character_pepe/4_hurt/H-41.png",
-    "img/2_character_pepe/4_hurt/H-41.png"
+    "img/2_character_pepe/4_hurt/H-42.png",
+    "img/2_character_pepe/4_hurt/H-43.png"
   ];
 
   IMAGES_DEAD = [

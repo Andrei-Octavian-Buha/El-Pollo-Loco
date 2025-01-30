@@ -6,10 +6,10 @@ class MovableObject extends DrawableObject {
   health = 100;
   lastHit = 0;
   offset = {
-    top:20,
-    bottom:20,
-    right:20,
-    left:20
+    top:0,
+    bottom:0,
+    right:0,
+    left:0
   }
 
   applyGravity(){
@@ -60,11 +60,11 @@ class MovableObject extends DrawableObject {
   isHurt(){
     let timepassed = new Date().getTime() - this.lastHit;
     timepassed = timepassed / 1000;
-    return timepassed < 0.5;
+    return timepassed < 0.1;
   }
 
   hit(){
-    this.health -= 5;
+    this.health -= 2;
     if(this.health < 0){
       this.health = 0;
     }else{
