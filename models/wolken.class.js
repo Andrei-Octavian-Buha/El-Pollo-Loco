@@ -3,8 +3,8 @@ class Wolken extends MovableObject {
   height = 150;
   constructor(imagePath) {
     super().loadImage(imagePath);
-    this.x = 0 + Math.random(700) * 500;
-    this.width = 500;
+    this.x = 0 + Math.random(1024) * 500;
+    this.width = 700;
     this.animate();
   }
 
@@ -12,7 +12,7 @@ class Wolken extends MovableObject {
     setInterval(() => {
       this.x -= this.speed;
       if (this.x < -400) {
-        this.x = 800;
+        this.x = 1100;
       }
     }, 1000 / 60);
   }

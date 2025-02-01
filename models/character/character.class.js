@@ -1,7 +1,8 @@
 class Character extends MovableObject {
   height = 280;
   width = 150;
-  y = 140;
+  x = 350;
+  y= 224;
   world;
   
   speed = 10;
@@ -15,6 +16,15 @@ class Character extends MovableObject {
     right:35,
     left:35,
   }
+
+  IMAGES_WALKING = [
+    "img/2_character_pepe/2_walk/W-21.png",
+    "img/2_character_pepe/2_walk/W-22.png",
+    "img/2_character_pepe/2_walk/W-23.png",
+    "img/2_character_pepe/2_walk/W-24.png",
+    "img/2_character_pepe/2_walk/W-25.png",
+    "img/2_character_pepe/2_walk/W-26.png",
+  ];
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -65,8 +75,8 @@ class Character extends MovableObject {
   }
 
   animate() {
-
     setInterval(() => {
+      this.world.camera_x = -this.x + 200;
       if(!this.isDead()){
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
           this.moveRight();
@@ -75,30 +85,28 @@ class Character extends MovableObject {
       if (this.world.keyboard.LEFT && this.x > 0) {
           this.moveToLeft();
           this.otherDirection = true;
-      }
-      this.world.camera_x = -this.x;
+        }
       if (this.world.keyboard.SPACE && !this.isAboveGround()){
           this.jump();
       } 
       }
-    }, 1000 / 60);
-
-    setInterval(() => {
-      if(this.isDead()){
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isAboveGround()) {
-          this.playAnimation(this.IMAGES_JUMP);
-      } else {
-          if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-              this.playAnimation(this.IMAGES_WALKING);
-          }
-      }
-    }, 50);
+    }, 1000 / 30);
+    this.fastAnimation();
   }
-
-
-
   
+  fastAnimation(){
+    setInterval(() => {
+      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
+        this.sound.walk.play();
+      }
+      else if(this.isDead()){
+        this.playAnimation(this.IMAGES_DEAD);
+      }else if (!this.isAboveGround()) {
+        this.playAnimation(this.IMAGES_JUMP);
+      }else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+    }  
+    }, 83);
+  }
 }

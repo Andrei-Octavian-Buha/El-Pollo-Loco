@@ -5,27 +5,34 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5;
   health = 100;
   lastHit = 0;
+  sound = new Sounds();
+
   offset = {
     top:0,
     bottom:0,
     right:0,
     left:0
   }
+  
+  world;
 
-  applyGravity(){
-    setInterval(()=>{
-      if(this.isAboveGround() ||this.speedY > 0){
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
-      }
-    }, 1000/25)
+  constructor() {
+    super();
+  }
+
+  applyGravity() { 
+      setInterval(() => {
+        if (this.isAboveGround() || this.speedY > 0) {
+          this.y -= this.speedY;
+          this.speedY -= this.acceleration;
+        }
+      }, 1000 / 30);
   }
 
   isAboveGround(){
-    return this.y < 140;
+    return this.y <  224;
   }
 
-  // character.isColliding(chicken);
   isColliding(mo){
     return  this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
@@ -33,16 +40,43 @@ class MovableObject extends DrawableObject {
             this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
   }
 
+  isCollidingFromBottomtoTop(mo){
+    return this.y + this.height - this.offset.bottom > mo.y + mo.offset.top&&
+            this.x + this.width - this.offset.right > mo.x;
+  }
+
   moveRight() {
-    this.x += this.speed;
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      this.x += this.speed;
+    }
   }
 
   moveToLeft() {
-    this.x -= this.speed;
+    if(this.isGameOnPause()){
+      return;
+    }else{
+        this.x -= this.speed;
+    }
   }
 
   jump(){
-    this.speedY = 30;
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      this.speedY = 30;
+      this.sound.playJump(); 
+    }
+  }
+
+  jumpfromhit(){
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      this.x -= this.width;
+      this.speedY = 20;
+    }
   }
 
   playAnimation(images) {
@@ -53,9 +87,6 @@ class MovableObject extends DrawableObject {
     this.currentImage++;
   }
 
-  isDead(){
-    return this.health == 0;
-  }
 
   isHurt(){
     let timepassed = new Date().getTime() - this.lastHit;
@@ -63,12 +94,26 @@ class MovableObject extends DrawableObject {
     return timepassed < 0.1;
   }
 
-  hit(){
-    this.health -= 2;
-    if(this.health < 0){
-      this.health = 0;
+  hit(){    
+    if(this.isGameOnPause()){
+      return;
     }else{
-      this.lastHit = new Date().getTime();
+      this.health -= 2;
+      this.jumpfromhit()
+      this.sound.takeDamage.play();
+      if(this.health < 0){
+        this.health = 0;
+      }else{
+        this.lastHit = new Date().getTime();
+      }
     }
+  }
+
+  isGameOnPause(){
+    let pause;
+    if(this.world){
+      pause = this.world.gamePaused;
+    }
+    return pause;
   }
 }
