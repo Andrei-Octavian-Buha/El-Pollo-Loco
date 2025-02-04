@@ -30,7 +30,11 @@ class MovableObject extends DrawableObject {
   }
 
   isAboveGround(){
-    return this.y <  224;
+    if(this instanceof ThrowableObject){
+      return true;
+    }else{
+      return this.y <  224;
+    }
   }
 
   isColliding(mo){
@@ -70,15 +74,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  jumpfromhit(){
-    if(this.isGameOnPause()){
-      return;
-    }else{
-      this.x -= this.width;
-      this.speedY = 20;
-    }
-  }
-
   playAnimation(images) {
     let i = this.currentImage % images.length;
     //i = 0, 1, 2, 3, 4, 5, 6, 0, 1,
@@ -99,7 +94,6 @@ class MovableObject extends DrawableObject {
       return;
     }else{
       this.health -= 2;
-      this.jumpfromhit()
       this.sound.takeDamage.play();
       if(this.health < 0){
         this.health = 0;
@@ -116,4 +110,6 @@ class MovableObject extends DrawableObject {
     }
     return pause;
   }
+
+
 }

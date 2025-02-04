@@ -4,10 +4,11 @@ class Character extends MovableObject {
   x = 350;
   y= 224;
   world;
-  
+  cooldown = false;
+
   speed = 10;
   health = 100;
-  botleLoot = 0;
+  botleLoot = 10;
   currentImage = 0;
 
   offset = {
@@ -17,6 +18,18 @@ class Character extends MovableObject {
     left:35,
   }
 
+  IMAGES_IDLE = [
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png",
+  ];
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -81,16 +94,22 @@ class Character extends MovableObject {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
           this.moveRight();
           this.otherDirection = false;
-      }
-      if (this.world.keyboard.LEFT && this.x > 0) {
+        }else if (this.world.keyboard.LEFT && this.x > 150) {
           this.moveToLeft();
           this.otherDirection = true;
-        }
-      if (this.world.keyboard.SPACE && !this.isAboveGround()){
+          console.log(this.otherDirection);
+        }else if (this.world.keyboard.SPACE && !this.isAboveGround()){
           this.jump();
-      } 
+        }
+        else if(this.world.keyboard.D){
+          if(this.botleLoot > 0 && !this.world.cooldown){
+            this.world.checkInterval();
+            this.world.throwBottle();
+            this.botleLoot -=  1;              
+          }
+        }
       }
-    }, 1000 / 30);
+    }, 25);
     this.fastAnimation();
   }
   
@@ -106,7 +125,8 @@ class Character extends MovableObject {
         this.playAnimation(this.IMAGES_JUMP);
       }else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
-    }  
+      }  
     }, 83);
   }
+
 }

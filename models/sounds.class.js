@@ -6,11 +6,17 @@ class Sounds {
         this.chickenDamage = new Audio("sounds/chicken-cluking-type-3-293320.mp3");
         this.collectBottle = new Audio("sounds/collect-5930.mp3");
     }
-    playSoundForDuration(sound, duration = 500) {
+
+    cleanupSound(sound) {
+        sound.pause();  // Stop the sound
+        sound.currentTime = 0;  // Reset to the beginning
+        sound.src = "";  // Clear the source to help release memory
+    }
+
+     playSoundForDuration(sound, duration = 500) {
         sound.play();
         setTimeout(() => {
-            sound.pause();  
-            sound.currentTime = 0;
+            this.cleanupSound(sound);  // Clean up the sound after duration
         }, duration);
     }
 

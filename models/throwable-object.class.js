@@ -1,5 +1,10 @@
 class ThrowableObject extends MovableObject {
-    speedX = 20;
+    offset = {
+        top:20,
+        bottom:20,
+        right:10,
+        left:10,
+      }
     IMAGES_BOTTLE_ROTATION = [
         "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
         "img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
@@ -15,20 +20,32 @@ class ThrowableObject extends MovableObject {
         "img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png",
     ]
 
-    constructor() {
-        // super();
-        // this.speedY= 30;
-        // this.loadImages(this.IMAGES_BOTTLE_ROTATION);
-        // this.loadImages(this.IMAGES_BOTTLE_SPLASH);
-        // this.loadImages(this.IMAGES_BOTTLE_ON_GROUND);
-        // this.animate();
+    constructor(x, y, otherDirection) {
+        super().loadImage("img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png");
+        this.speedY= 30;
+        this.loadImages(this.IMAGES_BOTTLE_ROTATION);
+        this.loadImages(this.IMAGES_BOTTLE_SPLASH);
+        this.x = x;
+        this.y = y;
+        this.width = 40;
+        this.height = 80;
+        this.otherDirection = otherDirection;
+        this.throw(this.x, this.y , this.otherDirection);
     }
-    animate(){
-        setInterval(() => {
-            
-        }, 1000/30);
-    }
-    throw(){
 
-    };
+    throw(x, y, otherDirection) {
+        this.otherDirection = otherDirection;
+        this.x = x;
+        this.y = y;
+        this.speedY = 20;
+        this.applyGravity();
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_BOTTLE_ROTATION);
+            if (!this.otherDirection) {
+            this.x += 20;
+            } else {
+            this.x -= 20;
+            }
+        }, 25);
+    }
 }
