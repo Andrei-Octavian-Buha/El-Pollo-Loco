@@ -94,7 +94,7 @@ class MovableObject extends DrawableObject {
       return;
     }else{
       this.health -= 2;
-      this.sound.takeDamage.play();
+      // this.sound.takeDamage.play();
       if(this.health < 0){
         this.health = 0;
       }else{

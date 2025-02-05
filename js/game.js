@@ -28,6 +28,7 @@ window.addEventListener("keydown", (event) => {
   }
   if (event.key == "Escape") {
     keyboard.ESC = true;
+    world.putGameOnPause();
   }
 });
 

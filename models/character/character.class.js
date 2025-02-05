@@ -100,8 +100,7 @@ class Character extends MovableObject {
           console.log(this.otherDirection);
         }else if (this.world.keyboard.SPACE && !this.isAboveGround()){
           this.jump();
-        }
-        else if(this.world.keyboard.D){
+        }else if(this.world.keyboard.D){
           if(this.botleLoot > 0 && !this.world.cooldown){
             this.world.checkInterval();
             this.world.throwBottle();

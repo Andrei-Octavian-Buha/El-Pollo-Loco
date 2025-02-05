@@ -23,14 +23,15 @@ constructor(canvas, keyboard) {
   this.checkCollisions();
   this.checkBottleCollision();
   this.run();
-  this.checkPause();
-  this.canvas.addEventListener('click', (event) => this.handleMouseClick(event));
+  // this.checkPause();
+  this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
 }
 
 setWorld() {
   this.character.world = this;
   this.level.enemies.forEach(enemy => enemy.world = this);
   this.mobj.world = this;
+  this.ui.world = this;
 }
 
 run(){
@@ -92,14 +93,13 @@ checkCollisions(){
 
 draw() {
   if (this.gamePaused) {
-    this.drawPausedScreen();
+    this.ui.drawUI();
   }else{
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addArrayObjectToGame();
     this.addToMap(this.character);
     this.ctx.translate(-this.camera_x, 0);
-    this.drawPauseButton();
     this.addObjectsToMap(this.statusBar);
   }
   //draw wird immer wieder aufgerufen
@@ -109,14 +109,6 @@ draw() {
   });
 }
 
-drawPausedScreen() {
-  this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-  this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  this.ctx.fillStyle = "white";
-  this.ctx.font = "30px Arial";
-  this.ctx.fillText("Game Paused", this.canvas.width / 2 - 75, this.canvas.height / 2);
-  this.drawPauseButton();
-}
 
 addArrayObjectToGame(){
   this.addObjectsToMap(this.level.backgroundObjects);
@@ -155,45 +147,19 @@ flipImageBack(mo){
   this.ctx.restore();
 }
 
-putGameOnPause(){
-  if(this.keyboard.ESC){
-    this.gamePaused = !this.gamePaused;
-    this.draw();
-    console.log("Ai apasat pe ESC si valoarea lui GAME PAUSED ii ",this.gamePaused);
+putGameOnPause() {
+  if (this.keyboard.ESC) { // Verifică dacă ESC este apăsat
+    this.gamePaused = !this.gamePaused; // Comută starea jocului
+    if (this.gamePaused) {
+      this.ui.currentUI = 'pause'; // Către meniul de pauză
+      this.ui.drawUI(); // Re-desenează UI-ul de pauză
+    } else {
+      this.ui.currentUI = 'resume'; // Reia jocul
+    }
   }
 }
 
-checkPause(){ 
-  setInterval(() => {
-    this.putGameOnPause();
-  }, 150);
-}
 
-drawPauseButton() {
-  const isHovered = this.isMouseOverButton(); // Check if the mouse is over the button
-  this.ctx.fillStyle = isHovered ? "lightgreen" : "lightblue"; // Change color on hover
-  this.ctx.fillRect(this.ui.pauseBtnX, this.ui.pauseBtnY, this.ui.width, this.ui.height);
-  this.ctx.fillStyle = "black";
-  this.ctx.font = "20px Arial";
-  this.ctx.fillText("Pause", this.ui.pauseBtnX + 5, this.ui.pauseBtnY + 22);
-}
-
-handleMouseClick(event) {
-    const mouseX = event.offsetX;
-    const mouseY = event.offsetY;
-    if (mouseX > this.ui.pauseBtnX && mouseX < this.ui.pauseBtnX + this.ui.width &&
-        mouseY > this.ui.pauseBtnY && mouseY < this.ui.pauseBtnY + this.ui.height) {
-      this.gamePaused = !this.gamePaused;
-      console.log("Game Paused:", this.gamePaused);
-    }
-}
-
-isMouseOverButton() {
-    const mouseX = this.mouseX;
-    const mouseY = this.mouseY;
-    return mouseX > this.ui.pauseBtnX && mouseX < this.ui.pauseBtnX + this.ui.width &&
-    mouseY > this.ui.pauseBtnY && mouseY < this.ui.pauseBtnY + this.ui.height;
-}
 
 // CHARACTER - METHODEN 
 throwBottle(){
