@@ -94,7 +94,6 @@ class Character extends MovableObject {
   }
 
   animate() {
-    let lastX = this.x;
     setInterval(() => {
       this.world.camera_x = -this.x + 200;
       if(!this.isDead()){
@@ -104,28 +103,34 @@ class Character extends MovableObject {
               this.world.keyboard.SPACE && !this.isAboveGround()) {
                   this.jump();
                   this.playAnimation(this.IMAGES_JUMP);
-        }else if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        }
+        else if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x)
+        {
           this.moveRight();
           this.otherDirection = false;
-        }else if (this.world.keyboard.LEFT && this.x > 150) {
+        }
+        else if (this.world.keyboard.LEFT && this.x > 150) {
           this.moveToLeft();
           this.otherDirection = true;
-        }else if(this.world.keyboard.D){
-          if(this.botleLoot > -0 && !this.world.cooldown){
+        }
+        else if(this.world.keyboard.D){
+          if(this.botleLoot > 0 && !this.world.cooldown){
             this.world.checkInterval();
-            this.world.throwBottle(19);
+            this.world.throwBottle(20);
             this.botleLoot -=  1;              
           }
-        }else if(this.world.keyboard.S){
-          if(this.botleLoot > -0 && !this.world.cooldown){
+        }
+        else if(this.world.keyboard.S){
+          if(this.botleLoot > 0 && !this.world.cooldown){
             this.world.checkInterval();
-            this.world.throwBottle(14);
+            this.world.throwBottle(15);
             this.botleLoot -=  1;              
           }
-        }else if(this.world.keyboard.A){
-          if(this.botleLoot > -0 && !this.world.cooldown){
+        }
+        else if(this.world.keyboard.A){
+          if(this.botleLoot > 0 && !this.world.cooldown){
             this.world.checkInterval();
-            this.world.throwBottle(9);
+            this.world.throwBottle(10);
             this.botleLoot -=  1;
           }
         }
@@ -134,6 +139,13 @@ class Character extends MovableObject {
         }
     }
     }, 1000/30);
+    
+ setInterval(() => {
+    if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
+      this.playAnimation(this.IMAGES_IDLE);
+    }
+  }, 1000); // 15 FPS for idle animation
+
     this.fastAnimation();
   }
 
