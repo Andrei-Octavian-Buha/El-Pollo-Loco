@@ -6,7 +6,7 @@ width = 65;
 height = 30;
 world;
 controlClicked = false;
-currentUI = 'pause';
+currentUI = 'start';
 
 uX;
 uY;
@@ -14,6 +14,8 @@ uWidth;
 uHeight;
  
 paths = {
+  startBtn: "img/5_background/start.png",
+  bgStart: "img/9_intro_outro_screens/start/startscreen_1.png",
     backArrow: "img/gui/btn/prew.png",
     bg: "img/gui/pause/bg.png",
     pauseHeader: "img/gui/pause/header.png",
@@ -46,6 +48,9 @@ paths = {
   drawUI() {
     this.world.ctx.clearRect(0, 0, this.world.canvas.width, this.world.canvas.height);
     switch (this.currentUI) {
+      case 'start':
+        this.drawStartMenu();
+        break;
       case 'pause':
         this.drawPauseMenu();
         break;
@@ -62,6 +67,11 @@ paths = {
         this.drawPauseMenu();
         break;
     }
+  }
+
+  drawStartMenu() {
+    this.world.ctx.drawImage(this.images.bgStart, 0, 0, 1024, 576);
+    this.world.ctx.drawImage(this.images.startBtn, 354, 500, 316, 64);
   }
 
   drawPauseMenu() {
@@ -116,6 +126,7 @@ paths = {
   // Exit button
   exitBtn() {
     this.world.ctx.drawImage(this.images.btnExit, 434, 299, 156, 56);
+    this.world.restartGame();
   }
 // BUTTON MENU
 
@@ -127,6 +138,10 @@ paths = {
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
 
+    if (this.isMouseOverButton(mouseX, mouseY, 354, 500, 316, 64)) {
+      this.world.gamePaused = false; 
+      this.currentUI = 'start'; 
+    }
     // Check if the controls button was clicked
     if (this.isMouseOverButton(mouseX, mouseY, 434, 131, 158, 56)) {
       this.world.gamePaused = false; // Reia jocul

@@ -7,9 +7,10 @@ ctx;
 keyboard;
 camera_x = 350;
 statusBar = [new HealthBar(), new BottleLootBar(), new Coins()];
-gamePaused = false;
+gamePaused = true;
 ui = new UI();
 botles = [new ThrowableObject()];
+
 
 cooldown = false;
 cooldownTimer = 500;
@@ -18,13 +19,12 @@ constructor(canvas, keyboard) {
   this.ctx = canvas.getContext("2d");
   this.canvas = canvas;
   this.keyboard = keyboard;
-  this.setWorld(); 
-  this.draw();
-  this.checkCollisions();
-  this.checkBottleCollision();
-  this.run();
-  // this.checkPause();
-  this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
+    this.setWorld(); 
+    this.draw();
+    this.checkCollisions();
+    this.checkBottleCollision();
+    this.run();
+    this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
 }
 
 setWorld() {
@@ -92,16 +92,17 @@ checkCollisions(){
 
 
 draw() {
-  if (this.gamePaused) {
-    this.ui.drawUI();
-  }else{
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.translate(this.camera_x, 0);
-    this.addArrayObjectToGame();
-    this.addToMap(this.character);
-    this.ctx.translate(-this.camera_x, 0);
-    this.addObjectsToMap(this.statusBar);
-  }
+    if (this.gamePaused) {
+      this.ui.drawUI();
+    }else{
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.translate(this.camera_x, 0);
+      this.addArrayObjectToGame();
+      this.addToMap(this.character);
+      this.ctx.translate(-this.camera_x, 0);
+      this.addObjectsToMap(this.statusBar);
+      this.restartGame();
+    }
   //draw wird immer wieder aufgerufen
   let self = this;
   requestAnimationFrame(function () {
@@ -162,8 +163,11 @@ putGameOnPause() {
 
 
 // CHARACTER - METHODEN 
-throwBottle(){
-    let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100, this.character.otherDirection);
+throwBottle(x){
+  console.log(x);
+  
+  let distance = x;
+    let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100, this.character.otherDirection, distance);
     this.botles.push(bottle);
 }
 
@@ -172,5 +176,40 @@ checkInterval(){
   setTimeout(() => {
           this.cooldown = false;
   }, this.cooldownTimer);
+}
+
+
+restartGame() {
+  if(this.character.health == 0 || this.ui.currentUI == 'exit'){
+    this.character.health = 100;
+    this.character.botleLoot = 10;
+    this.character.x = 350;
+    this.character.y = 224;
+    this.level.enemies.forEach(enemy => {
+      enemy.health = 100;
+      enemy.x = 500 + Math.random() * 500; 
+    });
+    this.botles = [];
+    this.gamePaused = true;
+    this.camera_x = 350;
+    this.statusBar[0].setPertange(this.character.health); 
+    this.statusBar[1].setPertange(this.character.botleLoot); 
+    this.ui.currentUI = 'start';
+  
+    this.level.loot.forEach(loot => {
+      loot.y = 330; 
+    });
+  
+  
+    // Resetează starea obiectelor de fundal și a norilor
+    this.level.backgroundObjects.forEach(background => {
+      background.x = background.initialX; 
+    });
+  
+    this.level.clouds.forEach(cloud => {
+      cloud.x = 0 + Math.random() * 500; // Resetează poziția inițială a norilor
+    });
+    this.draw();
+  }
 }
 }

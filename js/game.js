@@ -26,9 +26,19 @@ window.addEventListener("keydown", (event) => {
   if (event.key == "d") {
     keyboard.D = true;
   }
+  if (event.key == "s") {
+    keyboard.S = true;
+  }
+  if (event.key == "a") {
+    keyboard.A = true;
+  }
   if (event.key == "Escape") {
     keyboard.ESC = true;
     world.putGameOnPause();
+  }
+  if (event.key == "a") {
+    keyboard.ESC = true;
+    world.restartGame();
   }
 });
 
@@ -53,6 +63,12 @@ window.addEventListener("keyup", (event) => {
   }
   if (event.key == "Escape") {
     keyboard.ESC = false;
+  }
+  if (event.key == "s") {
+    keyboard.S = false;
+  }
+  if (event.key == "a") {
+    keyboard.A = false;
   }
 });
 
