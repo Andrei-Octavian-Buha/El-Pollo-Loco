@@ -11,7 +11,6 @@ gamePaused = true;
 ui = new UI();
 botles = [new ThrowableObject()];
 
-
 cooldown = false;
 cooldownTimer = 500;
 

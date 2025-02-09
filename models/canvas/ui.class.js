@@ -7,14 +7,16 @@ height = 30;
 world;
 controlClicked = false;
 currentUI = 'start';
-
+baseX =180;
+spacing = 10; 
 uX;
 uY;
 uWidth;
 uHeight;
  
 paths = {
-  startBtn: "img/5_background/start.png",
+  startBtn: "img/2.png",
+  controlsBtn: "img/1.png",
   bgStart: "img/9_intro_outro_screens/start/startscreen_1.png",
     backArrow: "img/gui/btn/prew.png",
     bg: "img/gui/pause/bg.png",
@@ -25,6 +27,13 @@ paths = {
     btnExit:"img/gui/buttons-text/exit.png",
     btnResume:"img/gui/buttons-text/resume.png",
     btnSetting:"img/gui/buttons-text/setting.png",
+    btnA:"img/keys/A.png",
+    btnS:"img/keys/S.png",
+    btnD:"img/keys/d.png",
+    btnArrowLeft:"img/keys/ARROWLEFT.png",
+    btnArrowRight:"img/keys/ARROWRIGHT.png",
+    btnSpace:"img/keys/SPACE.png",
+    btnEscape:"img/keys/Esc.png",
 };
 
   constructor(world){
@@ -70,8 +79,9 @@ paths = {
   }
 
   drawStartMenu() {
-    this.world.ctx.drawImage(this.images.bgStart, 0, 0, 1024, 576);
-    this.world.ctx.drawImage(this.images.startBtn, 354, 500, 316, 64);
+     this.world.ctx.drawImage(this.images.bgStart, 0, 0, 1024, 576);
+     this.world.ctx.drawImage(this.images.controlsBtn, 720, 520, 256, 48);
+      this.world.ctx.drawImage(this.images.startBtn, 354, 500, 316, 64);
   }
 
   drawPauseMenu() {
@@ -84,9 +94,24 @@ paths = {
 
   // Controls Menu
   drawControlsMenu() {
+    this.world.ctx.font = '32px zabras';
     this.world.ctx.drawImage(this.images.bg, 0, 0, 1024, 576);
     this.world.ctx.drawImage(this.images.pauseTable, 20, 20, 1004, 556);
     this.world.ctx.drawImage(this.images.btnControls, 434, 40, 156, 56);
+    this.world.ctx.drawImage(this.images.btnA, this.baseX, 80, 48,48);
+        this.world.ctx.fillText('Trow Short Shot', 234, 120);
+    this.world.ctx.drawImage(this.images.btnS, this.baseX, 80 + 48 + this.spacing, 48, 48);
+    this.world.ctx.fillText('Throw NORMAL shot', 234, 170);
+    this.world.ctx.drawImage(this.images.btnD, this.baseX, 80 + 2 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Throw LONG shot', 234, 230);
+    this.world.ctx.drawImage(this.images.btnSpace,this.baseX , 80 + 3 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Press to JUMP', 234, 285);
+    this.world.ctx.drawImage(this.images.btnArrowLeft, this.baseX, 80 + 4 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Move to Left', 234, 340);
+    this.world.ctx.drawImage(this.images.btnArrowRight, this.baseX, 80 + 5 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Move to Right', 234, 400);
+    this.world.ctx.drawImage(this.images.btnEscape, this.baseX, 80 + 6 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Press to ESCAPE', 234, 460);
     this.backArrowBtn();
   }
 
@@ -137,11 +162,11 @@ paths = {
   handleMouseClick(event) {
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
-
     if (this.isMouseOverButton(mouseX, mouseY, 354, 500, 316, 64)) {
       this.world.gamePaused = false; 
       this.currentUI = 'start'; 
     }
+    if(this.currentUI != 'start'){
     // Check if the controls button was clicked
     if (this.isMouseOverButton(mouseX, mouseY, 434, 131, 158, 56)) {
       this.world.gamePaused = false; // Reia jocul
@@ -166,6 +191,7 @@ paths = {
       this.currentUI = 'pause'; // Go back to the pause menu
     }
 
+  }
   }
   // Check if the mouse is over a button
   isMouseOverButton(mouseX, mouseY, buttonX, buttonY, buttonWidth, buttonHeight) {
