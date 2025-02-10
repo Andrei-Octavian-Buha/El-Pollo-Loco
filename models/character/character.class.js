@@ -97,6 +97,11 @@ class Character extends MovableObject {
     setInterval(() => {
       this.world.camera_x = -this.x + 200;
       if(!this.isDead()){
+        if(this.isGameOnPause()){
+          console.log("CHARACTER - This game is on PAUSE :",this.world.gamePaused);
+          return;
+        }else{
+
         if ((
               (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && 
               this.world.keyboard.SPACE && !this.isAboveGround()) || 
@@ -137,6 +142,7 @@ class Character extends MovableObject {
         else if(!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()){
           this.playAnimation(this.IMAGES_IDLE);
         }
+      }
     }
     }, 1000/30);
     

@@ -18,22 +18,28 @@ class Chicken extends MovableObject {
   ];
   IMAGES_DEAD = ["img/3_enemies_chicken/chicken_normal/2_dead/dead.png"];
 
-  constructor(y, x) {
+  constructor(y, x, world) {
     super();
     this.loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
-    this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_DEAD);  
     this.y = y;
+    this.world = world;
     this.x = x + 500 + Math.random() * 500;
     this.speed = 2 + Math.random() * 0.45;
     this.animate();  
-  
   }
 
   animate() {
     setInterval(() => {
       if(!this.isDead()){
-        this.moveToLeft();
+        if(this.isGameOnPause()){
+          console.log("CHICKEN - This game is on PAUSE :",this.world.gamePaused);
+          return;
+        }
+        else{
+          this.moveToLeft();
+        }
       }
     }, 1000 / 25);
     setInterval(() => {
@@ -44,7 +50,7 @@ class Chicken extends MovableObject {
       }
     }, 1000/ 10  / this.speed);
   }
-} 
+}
 
  
  

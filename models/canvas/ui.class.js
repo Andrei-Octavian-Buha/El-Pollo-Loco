@@ -60,6 +60,9 @@ paths = {
       case 'start':
         this.drawStartMenu();
         break;
+      case 'startControls':
+        this.startControlsMenu();
+        break;
       case 'pause':
         this.drawPauseMenu();
         break;
@@ -94,6 +97,27 @@ paths = {
 
   // Controls Menu
   drawControlsMenu() {
+    this.world.ctx.font = '32px zabras';
+    this.world.ctx.drawImage(this.images.bg, 0, 0, 1024, 576);
+    this.world.ctx.drawImage(this.images.pauseTable, 20, 20, 1004, 556);
+    this.world.ctx.drawImage(this.images.btnControls, 434, 40, 156, 56);
+    this.world.ctx.drawImage(this.images.btnA, this.baseX, 80, 48,48);
+        this.world.ctx.fillText('Trow Short Shot', 234, 120);
+    this.world.ctx.drawImage(this.images.btnS, this.baseX, 80 + 48 + this.spacing, 48, 48);
+    this.world.ctx.fillText('Throw NORMAL shot', 234, 170);
+    this.world.ctx.drawImage(this.images.btnD, this.baseX, 80 + 2 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Throw LONG shot', 234, 230);
+    this.world.ctx.drawImage(this.images.btnSpace,this.baseX , 80 + 3 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Press to JUMP', 234, 285);
+    this.world.ctx.drawImage(this.images.btnArrowLeft, this.baseX, 80 + 4 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Move to Left', 234, 340);
+    this.world.ctx.drawImage(this.images.btnArrowRight, this.baseX, 80 + 5 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Move to Right', 234, 400);
+    this.world.ctx.drawImage(this.images.btnEscape, this.baseX, 80 + 6 * (48 + this.spacing), 48, 48);
+        this.world.ctx.fillText('Press to ESCAPE', 234, 460);
+    this.backArrowBtn();
+  }
+    startControlsMenu() {
     this.world.ctx.font = '32px zabras';
     this.world.ctx.drawImage(this.images.bg, 0, 0, 1024, 576);
     this.world.ctx.drawImage(this.images.pauseTable, 20, 20, 1004, 556);
@@ -165,34 +189,37 @@ paths = {
     if (this.isMouseOverButton(mouseX, mouseY, 354, 500, 316, 64)) {
       this.world.gamePaused = false; 
       this.currentUI = 'start'; 
+    }else if(this.isMouseOverButton(mouseX, mouseY, 720, 520, 256, 48)){
+      this.currentUI = 'startControls'; // Switch to controls screen
     }
     if(this.currentUI != 'start'){
-    // Check if the controls button was clicked
-    if (this.isMouseOverButton(mouseX, mouseY, 434, 131, 158, 56)) {
-      this.world.gamePaused = false; // Reia jocul
-      this.currentUI = 'resume'; // Switch to controls screen
+        // Check if the controls button was clicked
+        if (this.isMouseOverButton(mouseX, mouseY, 434, 131, 158, 56)) {
+          this.world.gamePaused = false; // Reia jocul
+          this.currentUI = 'resume'; // Switch to controls screen
+        }
+        if (this.isMouseOverButton(mouseX, mouseY, 434, 187, 158, 56)) {
+          this.currentUI = 'controls'; // Switch to controls screen
+        }
+        // Check if the settings button was clicked
+        if (this.isMouseOverButton(mouseX, mouseY, 434, 243, 158, 56)) {
+          this.currentUI = 'settings'; // Switch to settings screen
+        }
+        // Check if the exit button was clicked
+        if (this.isMouseOverButton(mouseX, mouseY, 434, 299, 158, 56)) {
+          this.currentUI = 'exit'; // Exit the game or go to a different screen (implement as needed)
+        }
+        // Check if the back arrow button was clicked (common for all menus)
+        if (this.isMouseOverButton(mouseX, mouseY, 40, 40, 56, 56)) {
+          if (this.currentUI === 'controls') {
+            this.currentUI = 'pause'; // Go back to the pause menu
+          } else if (this.currentUI === 'startControls') {
+            this.currentUI = 'start'; // Go back to the pause menu
+          }
+        }
     }
-    if (this.isMouseOverButton(mouseX, mouseY, 434, 187, 158, 56)) {
-      this.currentUI = 'controls'; // Switch to controls screen
-    }
-
-    // Check if the settings button was clicked
-    if (this.isMouseOverButton(mouseX, mouseY, 434, 243, 158, 56)) {
-      this.currentUI = 'settings'; // Switch to settings screen
-    }
-
-    // Check if the exit button was clicked
-    if (this.isMouseOverButton(mouseX, mouseY, 434, 299, 158, 56)) {
-      this.currentUI = 'exit'; // Exit the game or go to a different screen (implement as needed)
-    }
-
-    // Check if the back arrow button was clicked (common for all menus)
-    if (this.isMouseOverButton(mouseX, mouseY, 40, 40, 56, 56)) {
-      this.currentUI = 'pause'; // Go back to the pause menu
-    }
-
   }
-  }
+
   // Check if the mouse is over a button
   isMouseOverButton(mouseX, mouseY, buttonX, buttonY, buttonWidth, buttonHeight) {
     return mouseX > buttonX && mouseX < buttonX + buttonWidth &&

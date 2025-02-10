@@ -16,8 +16,9 @@ class MovableObject extends DrawableObject {
   
   world;
 
-  constructor() {
+  constructor(world) {
     super();
+    this.world = world;
   }
 
   applyGravity() { 
@@ -61,7 +62,7 @@ class MovableObject extends DrawableObject {
     if(this.isGameOnPause()){
       return;
     }else{
-        this.x -= this.speed;
+      this.x -= this.speed;
     }
   }
 
@@ -104,12 +105,8 @@ class MovableObject extends DrawableObject {
   }
 
   isGameOnPause(){
-    let pause;
     if(this.world){
-      pause = this.world.gamePaused;
+      return this.world.gamePaused;
     }
-    return pause;
   }
-
-
 }
