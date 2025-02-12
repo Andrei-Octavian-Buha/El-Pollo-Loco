@@ -5,7 +5,7 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5;
   health = 100;
   lastHit = 0;
-  sound = new Sounds();
+
 
   offset = {
     top:0,
@@ -70,8 +70,7 @@ class MovableObject extends DrawableObject {
     if(this.isGameOnPause()){
       return;
     }else{
-      this.speedY = 30;
-      this.sound.playJump(); 
+      this.speedY = 25;
     }
   }
 
@@ -95,7 +94,6 @@ class MovableObject extends DrawableObject {
       return;
     }else{
       this.health -= 2;
-      // this.sound.takeDamage.play();
       if(this.health < 0){
         this.health = 0;
       }else{

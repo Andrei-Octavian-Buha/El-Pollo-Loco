@@ -2,6 +2,8 @@ class Endboss extends MovableObject {
   height = 256;
   width = 128;
   y = 170;
+  x;
+  world
 
   offset = {
     top:0,
@@ -26,16 +28,25 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
 
-  constructor() {
+  constructor(x, world) {
     super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
-    this.x = 1400;
+    this.x = x;
     this.speed = 0.5;
+    this.world = world;
     this.walk();
+
   }
   walk() {
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 150);
+  }
+
+  moveToBattelGround(){
+    setInterval(() => {
+      let distance = Math.sqrt(Math.pow(this.world.charater.x - this.x, 2));
+      console.log(distance);
+    }, 1000 / 30);
   }
 }

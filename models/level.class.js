@@ -4,7 +4,7 @@ class Level {
   clouds;
   backgroundObjects;
   loot;
-  level_end_x = 1024 * 4;
+  level_end_x = (1024 * 6) + 150;
   enumber = 500;
   y = 430;
   characterX;
@@ -14,23 +14,30 @@ class Level {
     this.loot = loot;
     this.backgroundObjects = backgroundObjects;
     this.world = world;
-    this.addRandomEnemies(this.world);
+    this.addRandomEnemies();
   }
 
   addRandomEnemies(){
-    setInterval(() => {
-     if(this.isGameOnPause()){
-      return;
-     }else if(this.world && this.world.character.health >= 0){
+    let spawnEnemies = setInterval(() => {
       this.y  = 430 +  Math.random() * 30 - 20;
-      if(this.world.character.x > 350){
-        this.characterX = this.world.character.x;
+      this.characterX = this.world.character.x;
+     if(this.isGameOnPause()){
+       return;
+     }else if(this.world && this.world.character.health >= 0){
+       if(this.isEndGame()){
+        this.enemies.push(new Endboss(this.characterX + 700, this.world)); 
+        clearInterval(spawnEnemies);
+      }else if(this.world.character.x > 350){
         this.enemies.push(new Chicken(this.y, this.characterX, this.world));
-        console.log("ENEMY ADDED");
-        
       }
     }
-    }, 1000);
+    }, 1500);
+  }
+
+  isEndGame(){
+    if(this.world.character.x >= this.level_end_x){
+      return true;
+    }
   }
 
   isGameOnPause(){

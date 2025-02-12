@@ -36,10 +36,6 @@ window.addEventListener("keydown", (event) => {
     keyboard.ESC = true;
     world.putGameOnPause();
   }
-  if (event.key == "a") {
-    keyboard.ESC = true;
-    world.restartGame();
-  }
 });
 
 window.addEventListener("keyup", (event) => {

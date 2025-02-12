@@ -195,7 +195,7 @@ restartGame() {
     this.statusBar[0].setPertange(this.character.health); 
     this.statusBar[1].setPertange(this.character.botleLoot); 
     this.ui.currentUI = 'start';
-  
+    this.level.enemies = [];
     this.level.loot.forEach(loot => {
       loot.y = 330; 
     });

@@ -6,16 +6,16 @@ class Character extends MovableObject {
   world;
   cooldown = false;
 
-  speed = 10;
+  speed = 8;
   health = 100;
   botleLoot = 10;
   currentImage = 0;
 
   offset = {
     top:120,
-    bottom:10,
-    right:35,
-    left:35,
+    bottom:15,
+    right: 55,
+    left:45,
   }
 
   IMAGES_IDLE = [
@@ -98,16 +98,13 @@ class Character extends MovableObject {
       this.world.camera_x = -this.x + 200;
       if(!this.isDead()){
         if(this.isGameOnPause()){
-          console.log("CHARACTER - This game is on PAUSE :",this.world.gamePaused);
           return;
         }else{
-
         if ((
               (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && 
               this.world.keyboard.SPACE && !this.isAboveGround()) || 
               this.world.keyboard.SPACE && !this.isAboveGround()) {
                   this.jump();
-                  this.playAnimation(this.IMAGES_JUMP);
         }
         else if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x)
         {
@@ -117,60 +114,49 @@ class Character extends MovableObject {
         else if (this.world.keyboard.LEFT && this.x > 150) {
           this.moveToLeft();
           this.otherDirection = true;
-        }
-        else if(this.world.keyboard.D){
-          if(this.botleLoot > 0 && !this.world.cooldown){
+        }else if(this.botleLoot > 0 && !this.world.cooldown){
+          if(this.world.keyboard.D ){
             this.world.checkInterval();
             this.world.throwBottle(20);
             this.botleLoot -=  1;              
-          }
-        }
-        else if(this.world.keyboard.S){
-          if(this.botleLoot > 0 && !this.world.cooldown){
+          }else if(this.world.keyboard.S ){
             this.world.checkInterval();
             this.world.throwBottle(15);
             this.botleLoot -=  1;              
-          }
-        }
-        else if(this.world.keyboard.A){
-          if(this.botleLoot > 0 && !this.world.cooldown){
+          }else if(this.world.keyboard.A ){
             this.world.checkInterval();
             this.world.throwBottle(10);
             this.botleLoot -=  1;
           }
         }
-        else if(!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()){
-          this.playAnimation(this.IMAGES_IDLE);
-        }
       }
     }
     }, 1000/30);
     
- setInterval(() => {
-    if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
-      this.playAnimation(this.IMAGES_IDLE);
-    }
-  }, 1000); // 15 FPS for idle animation
+    setInterval(() => {
+      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
+        this.playAnimation(this.IMAGES_IDLE);
+      }
+    }, 333);
 
     this.fastAnimation();
   }
 
-  playIdleAnimation(){
-    return this.playAnimation(this.IMAGES_IDLE);
-  }
   fastAnimation(){
     setInterval(() => {
-      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
         this.playAnimation(this.IMAGES_WALKING);
         this.sound.walk.play();
-      }
-      else if(this.isDead()){
+      }else if(this.isDead()){
         this.playAnimation(this.IMAGES_DEAD);
-      }else if (!this.isAboveGround()) {
-        // this.playAnimation(this.IMAGES_JUMP);
       }else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
-      }  
+      }
     }, 150);
+    setInterval(() => {
+      if(this.isAboveGround()){
+        this.playAnimation(this.IMAGES_JUMP);
+      }
+    }, 200);
   }
 }
