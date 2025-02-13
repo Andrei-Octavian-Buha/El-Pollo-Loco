@@ -42,11 +42,7 @@ class Endboss extends MovableObject {
       this.playAnimation(this.IMAGES_WALKING);
     }, 150);
   }
+  endbossAtackMovemet(x, y) {
 
-  moveToBattelGround(){
-    setInterval(() => {
-      let distance = Math.sqrt(Math.pow(this.world.charater.x - this.x, 2));
-      console.log(distance);
-    }, 1000 / 30);
   }
 }
