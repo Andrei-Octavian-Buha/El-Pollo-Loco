@@ -19,11 +19,14 @@ constructor(canvas, keyboard) {
   this.keyboard = keyboard;
     this.setWorld(); 
     this.draw();
-    this.checkCollisions();
     this.checkBottleCollision();
-    // this.checkBottleWithEndboss();
+    this.checkCollisions();
     this.run();
     this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
+}
+
+testLevelToWorld(){
+  this.statusBar.push(new EnemyBar());
 }
 
 setWorld() {
@@ -44,7 +47,6 @@ checkBotleLoot(){
   this.level.loot.forEach((botle)=>{
     if(this.character.isColliding(botle)){
       this.character.botleLoot += 20;
-      // this.mobj.sound.playCollectBottle();
       console.log("Ai adunat", this.character.botleLoot);
       this.statusBar[1].setPertange(this.character.botleLoot);
       botle.y = -100;
@@ -58,8 +60,10 @@ checkBottleCollision() {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy)) {
           if(enemy.health >0){
-            if(this.level.isEndGame()){
+            if(this.level.endgame == true){
+              enemy.hit();
               enemy.health -= 5;
+              this.statusBar[3].setPertange(enemy.health);
               this.botles.splice(bottleIndex, 1);
             }else{
               enemy.health -= 50;
@@ -78,18 +82,22 @@ checkBottleCollision() {
 checkCollisions(){
   setInterval(() => {
     this.level.enemies.forEach((enemy)=>{
-        if(this.character.isColliding(enemy)){
-          if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy)){
-            // if(enemy.health > 0){
-            //   // this.mobj.sound.playChickenDamage();
-            // }
-            enemy.health = 0; 
+      if(this.character.isColliding(enemy)){
+        if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy)){
+          enemy.health = 0; 
         }else if(enemy.health > 0){              
-            this.character.hit();
+          this.character.hit(); 
+          if(this.level.endgame == true){
+            this.character.health -= 10;
+            this.statusBar[0].setPertange(this.character.health);
+            console.log("Health", this.character.health);
+          }else{
+            this.character.health -= 3;
             this.statusBar[0].setPertange(this.character.health);
             console.log("Health", this.character.health);
           }
         }
+      }
     });
   }, 1000/30);
 }
@@ -154,13 +162,13 @@ flipImageBack(mo){
 }
 
 putGameOnPause() {
-  if (this.keyboard.ESC) { // Verifică dacă ESC este apăsat
-    this.gamePaused = !this.gamePaused; // Comută starea jocului
+  if (this.keyboard.ESC) { 
+    this.gamePaused = !this.gamePaused; 
     if (this.gamePaused) {
-      this.ui.currentUI = 'pause'; // Către meniul de pauză
-      this.ui.drawUI(); // Re-desenează UI-ul de pauză
+      this.ui.currentUI = 'pause'; 
+      this.ui.drawUI(); 
     } else {
-      this.ui.currentUI = 'resume'; // Reia jocul
+      this.ui.currentUI = 'resume'; 
     }
   }
 }

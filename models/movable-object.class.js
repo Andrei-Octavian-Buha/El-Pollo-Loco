@@ -93,7 +93,6 @@ class MovableObject extends DrawableObject {
     if(this.isGameOnPause()){
       return;
     }else{
-      this.health -= 2;
       if(this.health < 0){
         this.health = 0;
       }else{
@@ -101,6 +100,7 @@ class MovableObject extends DrawableObject {
       }
     }
   }
+
 
   isGameOnPause(){
     if(this.world){

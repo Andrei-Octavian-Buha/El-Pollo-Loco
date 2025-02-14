@@ -8,6 +8,7 @@ class Level {
   y = 430;
   characterX;
   spawnEnemies;
+  endGameBossIntverval;
   endgame = false;
   constructor(enemies, clouds, loot,  backgroundObjects, world) {
     this.enemies = enemies;
@@ -20,16 +21,13 @@ class Level {
 
 
 addEnemiesToGame() {
-  if (this.spawnEnemies) return;
-
-    if (this.isEndGame()) {
-      clearInterval(this.spawnEnemies); // Stop spawning enemies when the game ends
-      this.spawnEnemies = null; // Reset the interval reference
-      this.addEndBossToGame(); // Add the end boss
+    this.endGameBossInterval = setInterval(() => {
+     if(this.endgame == true) {
+      this.addEndBossToGame();
     } else {
-      // Continue adding random enemies if the game is ongoing
       this.addRandomEnemies();
     }
+  }, 1000/30);
 }
 
 
@@ -45,25 +43,26 @@ addEnemiesToGame() {
           this.enemies.push(new Chicken(this.y, this.characterX, this.world));
         }
       }
+      if(this.world.character.x > 1024 * 5){
+        this.endgame = true;
+      }
     }, 1500);
   }
 
-  isEndGame(){ 
-      if(this.world && this.world.character.x <= (this.level_end_x-150) && !this.endgame){
-        console.log("END GAME - This game is over :", this.endgame);
-        this.endgame = true;
-        return this.endgame;
-      }    
-}
+
 
   addEndBossToGame(){
-    this.enemies.push(new Endboss(this.characterX + 400, this.world)); 
-    this.world.statusbar.push(new HealthBarEndboss());   
+    clearInterval(this.spawnEnemies);
+    clearInterval(this.endGameBossInterval);
+    this.spawnEnemies = null;
+    this.enemies.push(new Endboss(this.characterX + 300, this.world)); 
+    if(this.world){
+      this.world.testLevelToWorld();
+    }
   }
 
   isGameOnPause(){
     if(this.world){
-      console.log("ADD-ENEMIES - This game is on PAUSE :",this.world.gamePaused);
       return this.world.gamePaused;
     }
   }

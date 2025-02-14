@@ -1,11 +1,11 @@
 class Endboss extends MovableObject {
   height = 256;
   width = 128;
-  y = 170;
+  y = 240;
   x;
   world;
   health = 100;
-
+  speed = 10;
 
   offset = {
     top:0,
@@ -13,7 +13,18 @@ class Endboss extends MovableObject {
     right:0,
     left:0
   }
-  IMAGES_WALKING = [
+  moves = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+    7: false,
+    8: false,
+    9: false,
+  }
+  IMAGES_ALERT = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
     "img/4_enemie_boss_chicken/2_alert/G6.png",
     "img/4_enemie_boss_chicken/2_alert/G7.png",
@@ -21,31 +32,93 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/2_alert/G9.png",
     "img/4_enemie_boss_chicken/2_alert/G10.png",
     "img/4_enemie_boss_chicken/2_alert/G11.png",
-    "img/4_enemie_boss_chicken/2_alert/G12.png",
+    "img/4_enemie_boss_chicken/2_alert/G12.png"
   ];
-  IMAGES_ALERT = [
+
+  IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
     "img/4_enemie_boss_chicken/1_walk/G2.png",
     "img/4_enemie_boss_chicken/1_walk/G3.png",
-    "img/4_enemie_boss_chicken/1_walk/G4.png",
+    "img/4_enemie_boss_chicken/1_walk/G4.png"
   ];
+
+  IMAGES_ATTACK = [
+    "img/4_enemie_boss_chicken/3_attack/G13.png",
+    "img/4_enemie_boss_chicken/3_attack/G14.png",
+    "img/4_enemie_boss_chicken/3_attack/G15.png",
+    "img/4_enemie_boss_chicken/3_attack/G17.png",
+    "img/4_enemie_boss_chicken/3_attack/G17.png",
+    "img/4_enemie_boss_chicken/3_attack/G18.png",
+    "img/4_enemie_boss_chicken/3_attack/G19.png",
+    "img/4_enemie_boss_chicken/3_attack/G20.png"
+  ];
+  IMAGES_HURT = [
+    "img/4_enemie_boss_chicken/4_hurt/G21.png",
+    "img/4_enemie_boss_chicken/4_hurt/G22.png",
+    "img/4_enemie_boss_chicken/4_hurt/G23.png"
+  ];
+  IMAGES_DEAD = [
+    "img/4_enemie_boss_chicken/5_dead/G24.png",
+    "img/4_enemie_boss_chicken/5_dead/G25.png",
+    "img/4_enemie_boss_chicken/5_dead/G26.png"
+  ];
+
   constructor(x, world) {
-    super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
+    super().loadImage("img/4_enemie_boss_chicken/1_walk/G1.png");
+    this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_ATTACK);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
     this.x = x;
     this.speed = 0.5;
     this.world = world;
-    this.walk();
-    this.endbossAtackMovemet();
+    this.walk(); 
+    this.checkEndBossHealth();
+    this.playWalkAnimation();
   }
+
   walk() {
     setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
-    }, 150);
+        if(this.x > this.world.character.x + 20){
+          this.x -= this.speed;
+          this.otherDirection = false;
+        }else if(this.x < this.world.character.x - 20){
+          this.x += this.speed;
+          this.otherDirection = true;
+        }
+    }, 1000/30);
   }
-  endbossAtackMovemet() {
+
+  playWalkAnimation(){
     setInterval(() => {
+      if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      }else{
+        this.playAnimation(this.IMAGES_WALKING);
+      }
+    },334);
+  }
+
+  checkEndBossHealth() {
+    let lastHealth = this.health;
+    let intv = setInterval(() => {
+      if (lastHealth != this.health) {
+        this.endbossAtackMovemet();
+        lastHealth = this.health;
+      }
+      if (this.health <= 0) {
+        clearInterval(intv);
+        this.playAnimation(this.IMAGES_DEAD);
+        this.world.endgame = false;
+        this.world.enemies = [];
+      }
+    }, 1000/30);
+  }
+
+  endbossAtackMovemet(){ 
       if (this.health == 90) {
+        this.speed = 30;
         console.log("Endboss inca ", this.health);
       } else if (this.health == 80) {
         console.log("Endboss inca ", this.health);
@@ -59,13 +132,13 @@ class Endboss extends MovableObject {
         console.log("Endboss inca ", this.health);
       } else if (this.health == 30) {
         console.log("Endboss inca ", this.health);
-      } else if (this.health == 20) {
-        console.log("Endboss inca ", this.health);
+      } else if (this.health == 20 && this.moves[2] == false) {
+        this.health = 80;
+        this.moves[2] = true;
       } else if (this.health == 10) {
         console.log("Endboss inca ", this.health);
       } else if (this.health >= 1) {
         console.log("Endboss inca ", this.health);
       }
-    }, 1000 / 30)
   }
 }

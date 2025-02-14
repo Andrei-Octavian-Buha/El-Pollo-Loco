@@ -6,7 +6,7 @@ class Character extends MovableObject {
   world;
   cooldown = false;
 
-  speed = 20;
+  speed = 40;
   health = 100;
   botleLoot = 10;
   currentImage = 0;
