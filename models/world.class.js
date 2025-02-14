@@ -10,7 +10,6 @@ statusBar = [new HealthBar(), new BottleLootBar(), new Coins()];
 gamePaused = true;
 ui = new UI();
 botles = [new ThrowableObject()];
-
 cooldown = false;
 cooldownTimer = 500;
 
@@ -22,6 +21,7 @@ constructor(canvas, keyboard) {
     this.draw();
     this.checkCollisions();
     this.checkBottleCollision();
+    // this.checkBottleWithEndboss();
     this.run();
     this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
 }
@@ -58,8 +58,13 @@ checkBottleCollision() {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy)) {
           if(enemy.health >0){
-            enemy.health -= 50; 
-            this.botles.splice(bottleIndex, 1);
+            if(this.level.isEndGame()){
+              enemy.health -= 5;
+              this.botles.splice(bottleIndex, 1);
+            }else{
+              enemy.health -= 50;
+              this.botles.splice(bottleIndex, 1);
+            } 
             if (enemy.health <= 0) {
             }
           }

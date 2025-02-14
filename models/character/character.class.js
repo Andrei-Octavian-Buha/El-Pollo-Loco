@@ -6,7 +6,7 @@ class Character extends MovableObject {
   world;
   cooldown = false;
 
-  speed = 8;
+  speed = 20;
   health = 100;
   botleLoot = 10;
   currentImage = 0;
@@ -146,7 +146,7 @@ class Character extends MovableObject {
     setInterval(() => {
       if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
         this.playAnimation(this.IMAGES_WALKING);
-        this.sound.walk.play();
+        // this.sound.walk.play();
       }else if(this.isDead()){
         this.playAnimation(this.IMAGES_DEAD);
       }else if (this.isHurt()) {
