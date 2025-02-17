@@ -6,9 +6,9 @@ class Character extends MovableObject {
   world;
   cooldown = false;
 
-  speed = 40;
+  speed = 10;
   health = 100;
-  botleLoot = 10;
+  botleLoot = 0;
   currentImage = 0;
 
   offset = {
@@ -118,15 +118,21 @@ class Character extends MovableObject {
           if(this.world.keyboard.D ){
             this.world.checkInterval();
             this.world.throwBottle(20);
-            this.botleLoot -=  1;              
+            this.botleLoot -=  1;
+            console.log(`Mai ai ${this.botleLoot}`);
+            this.world.statusBar[1].setPertange(this.world.character.botleLoot);
           }else if(this.world.keyboard.S ){
             this.world.checkInterval();
             this.world.throwBottle(15);
             this.botleLoot -=  1;              
+            console.log(`Mai ai ${this.botleLoot}`);
+            this.world.statusBar[1].setPertange(this.world.character.botleLoot);
           }else if(this.world.keyboard.A ){
             this.world.checkInterval();
             this.world.throwBottle(10);
             this.botleLoot -=  1;
+            console.log(`Mai ai ${this.botleLoot}`);
+            this.world.statusBar[1].setPertange(this.world.character.botleLoot);
           }
         }
       }

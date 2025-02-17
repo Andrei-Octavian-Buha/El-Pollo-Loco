@@ -12,10 +12,10 @@ class EnemyBar extends DrawableObject{
     constructor(health) {
       super();
       this.percentage = health;
-        this.x = 700;
-        this.y = 50;
-        this.width= 200;
-        this.height= 40;
+        this.x = 750;
+        this.y = 0;
+        this.width= 256;
+        this.height= 128;
         this.loadImage("img/7_statusbars/2_statusbar_endboss/blue/blue100.png");
         this.loadImages(this.IMAGES_BOTTLE);
         this.setPertange(100);

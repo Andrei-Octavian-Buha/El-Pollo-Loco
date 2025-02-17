@@ -15,6 +15,8 @@ uWidth;
 uHeight;
  
 paths = {
+  youWin: "img/9_intro_outro_screens/win/win_2.png",
+  gameOver: "img/9_intro_outro_screens/game_over/game over.png",
   startBtn: "img/2.png",
   controlsBtn: "img/1.png",
   bgStart: "img/9_intro_outro_screens/start/startscreen_1.png",
@@ -53,6 +55,13 @@ paths = {
     this.world.ctx.drawImage(this.images.bg, 0, 0, 1024, 576);
     this.world.ctx.drawImage(this.images.pauseTable, 20, 20, 1004, 556);
   }
+
+  youwin(){
+    this.world.ctx.fillStyle = "#FFFFFF";
+    this.world.ctx.fillRect(0,0,1024,576);
+    this.world.ctx.drawImage(this.images.youWin, 0, 0, 1024, 576);
+  }
+
 
   drawUI() {
     this.world.ctx.clearRect(0, 0, this.world.canvas.width, this.world.canvas.height);

@@ -4,10 +4,7 @@ const  level1  = new Level(
       new Wolken("img/5_background/layers/4_clouds/1.png"),
       new Wolken("img/5_background/layers/4_clouds/2.png"),
     ],
-    [
-      new BotleLoot("img/6_salsa_bottle/1_salsa_bottle_on_ground.png"),
-      new BotleLoot("img/6_salsa_bottle/2_salsa_bottle_on_ground.png"),
-    ],
+    [],
     [
       new BackgroundObject("img/5_background/layers/air.png", -1023),
       new BackgroundObject("img/5_background/layers/3_third_layer/2.png", -1023),

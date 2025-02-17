@@ -10,6 +10,8 @@ class Level {
   spawnEnemies;
   endGameBossIntverval;
   endgame = false;
+  lastX = 0;
+
   constructor(enemies, clouds, loot,  backgroundObjects, world) {
     this.enemies = enemies;
     this.clouds = clouds;
@@ -17,39 +19,36 @@ class Level {
     this.backgroundObjects = backgroundObjects;
     this.world = world;
     this.addEnemiesToGame();
+    this.addBottleToLevel();
   }
 
-
-addEnemiesToGame() {
-    this.endGameBossInterval = setInterval(() => {
-     if(this.endgame == true) {
-      this.addEndBossToGame();
-    } else {
-      this.addRandomEnemies();
-    }
-  }, 1000/30);
-}
-
+  addEnemiesToGame() {
+      this.endGameBossInterval = setInterval(() => {
+      if(this.endgame == true) {
+        this.addEndBossToGame();
+      } else {
+        this.addRandomEnemies();
+      }
+    }, 1000/30);
+  }
 
   addRandomEnemies(){
     if(this.spawnEnemies) return;
      this.spawnEnemies = setInterval(() => {
-      this.y = Math.floor(Math.random() * 50) + 410; // this.y  = 430 +  Math.random() * 30 - 20;
+      this.y = Math.floor(Math.random() * 10) + 420; // this.y  = 430 +  Math.random() * 30 - 20;
       this.characterX = this.world.character.x;
      if(this.isGameOnPause()){
        return;
-     }else if(this.world && this.world.character.health >= 0){
+     }else if(this.world && this.world.character.health > 0){
         if(this.world.character.x > 350){
           this.enemies.push(new Chicken(this.y, this.characterX, this.world));
         }
       }
-      if(this.world.character.x > 1024 * 5){
+      if(this.world.character.x > 1023*6 -300){
         this.endgame = true;
       }
     }, 1500);
   }
-
-
 
   addEndBossToGame(){
     clearInterval(this.spawnEnemies);
@@ -61,9 +60,18 @@ addEnemiesToGame() {
     }
   }
 
+  addBottleToLevel(){
+    for (let i = 0; i <= 4; i++) {
+      let x = this.lastX + 800 + Math.random() * (6000-400);
+      this.loot.push(new BotleLoot(x));
+      console.log(`Added BottleLoot with x-coordinate: ${x} at index: ${i}`);
+    }
+  }
+
   isGameOnPause(){
     if(this.world){
       return this.world.gamePaused;
     }
+    return  false;
   }
 }

@@ -6,6 +6,7 @@ class Endboss extends MovableObject {
   world;
   health = 100;
   speed = 10;
+  isAttacking = false;
 
   offset = {
     top:0,
@@ -74,12 +75,29 @@ class Endboss extends MovableObject {
     this.speed = 0.5;
     this.world = world;
     this.walk(); 
+    this.changesize();
     this.checkEndBossHealth();
     this.playWalkAnimation();
   }
 
+  changesize(){
+    setInterval(() => {
+      this.width = 40;
+      this.height= 70;
+      this.y = 420;
+      setTimeout(() => {
+        this.width = 128;
+        this.height = 256;
+        this.y = 240;
+      },2000 );
+    }, 5000);
+  }
   walk() {
     setInterval(() => {
+      if(this.isAttacking){
+        console.log("Bosul este in Modul ATTACK",this.isAttacking);
+        return;
+      }else {
         if(this.x > this.world.character.x + 20){
           this.x -= this.speed;
           this.otherDirection = false;
@@ -87,6 +105,7 @@ class Endboss extends MovableObject {
           this.x += this.speed;
           this.otherDirection = true;
         }
+      }
     }, 1000/30);
   }
 
@@ -117,28 +136,29 @@ class Endboss extends MovableObject {
   }
 
   endbossAtackMovemet(){ 
-      if (this.health == 90) {
-        this.speed = 30;
-        console.log("Endboss inca ", this.health);
+      if (this.health == 90 && this.moves[9] == false) {
+        this.speed = 10;
+          let hpAttack = setInterval(() => {
+          if(this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right)){
+            console.log("A existat un contact");
+            this.isAttacking == true;
+            this.moves[9] == true;
+            this.x += 500;
+            clearInterval(hpAttack);
+            this.speed = 0.5;
+          }
+        }, 1000/30);
       } else if (this.health == 80) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health == 70) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health == 60) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health == 50) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health == 40) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health == 30) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health == 20 && this.moves[2] == false) {
-        this.health = 80;
+        this.health = 30;
         this.moves[2] = true;
       } else if (this.health == 10) {
-        console.log("Endboss inca ", this.health);
       } else if (this.health >= 1) {
-        console.log("Endboss inca ", this.health);
       }
   }
 }

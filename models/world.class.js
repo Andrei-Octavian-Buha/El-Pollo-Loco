@@ -12,16 +12,14 @@ ui = new UI();
 botles = [new ThrowableObject()];
 cooldown = false;
 cooldownTimer = 500;
+gameOver = false;
 
 constructor(canvas, keyboard) {
   this.ctx = canvas.getContext("2d");
   this.canvas = canvas;
   this.keyboard = keyboard;
     this.setWorld(); 
-    this.draw();
-    this.checkBottleCollision();
-    this.checkCollisions();
-    this.run();
+    this.draw()
     this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
 }
 
@@ -37,32 +35,24 @@ setWorld() {
   this.ui.world = this;
 }
 
-run(){
-  setInterval(() => {
-    this.checkBotleLoot();
-  }, 200);
-}
-
 checkBotleLoot(){
-  this.level.loot.forEach((botle)=>{
+  this.level.loot.forEach((botle, bottleIndex )=>{
     if(this.character.isColliding(botle)){
       this.character.botleLoot += 20;
-      console.log("Ai adunat", this.character.botleLoot);
       this.statusBar[1].setPertange(this.character.botleLoot);
-      botle.y = -100;
+      this.level.loot.splice(bottleIndex,1);
     }
   });
 }
 
 checkBottleCollision() {
-  setInterval(() => {
     this.botles.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy)) {
-          if(enemy.health >0){
+          if(enemy.health > 0){
             if(this.level.endgame == true){
               enemy.hit();
-              enemy.health -= 5;
+              enemy.health -= 100;
               this.statusBar[3].setPertange(enemy.health);
               this.botles.splice(bottleIndex, 1);
             }else{
@@ -70,25 +60,29 @@ checkBottleCollision() {
               this.botles.splice(bottleIndex, 1);
             } 
             if (enemy.health <= 0) {
+              if(this.level.endgame == true){
+                this.gameOver = true;
+              }
             }
           }
         }
       });
     });
-  }, 1000/30);
-
 }
 
 checkCollisions(){
-  setInterval(() => {
     this.level.enemies.forEach((enemy)=>{
       if(this.character.isColliding(enemy)){
         if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy)){
-          enemy.health = 0; 
+          if(this.level.endgame == true){
+            return;
+          }else{
+            enemy.health = 0; 
+          }
         }else if(enemy.health > 0){              
           this.character.hit(); 
           if(this.level.endgame == true){
-            this.character.health -= 10;
+            this.character.health -= 5;
             this.statusBar[0].setPertange(this.character.health);
             console.log("Health", this.character.health);
           }else{
@@ -99,28 +93,34 @@ checkCollisions(){
         }
       }
     });
-  }, 1000/30);
 }
 
 
 
 draw() {
-    if (this.gamePaused) {
-      this.ui.drawUI();
-    }else{
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.translate(this.camera_x, 0);
-      this.addArrayObjectToGame();
-      this.addToMap(this.character);
-      this.ctx.translate(-this.camera_x, 0);
-      this.addObjectsToMap(this.statusBar);
-      this.restartGame();
-    }
-  //draw wird immer wieder aufgerufen
-  let self = this;
-  requestAnimationFrame(function () {
-    self.draw();
-  });
+  if(this.gameOver){
+    this.ui.youwin();
+  }else{
+      if (this.gamePaused) {
+        this.ui.drawUI();
+      }else{
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0);
+        this.addArrayObjectToGame();
+        this.addToMap(this.character);
+        this.ctx.translate(-this.camera_x, 0);
+        this.addObjectsToMap(this.statusBar);
+        this.checkBottleCollision();
+        this.checkCollisions(); 
+        this.checkBotleLoot();
+        this.restartGame();
+      }
+    //draw wird immer wieder aufgerufen
+    let self = this;
+    requestAnimationFrame(function () {
+      self.draw();
+    });
+  }
 }
 
 
@@ -178,7 +178,6 @@ putGameOnPause() {
 // CHARACTER - METHODEN 
 throwBottle(x){
   console.log(x);
-  
   let distance = x;
     let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100, this.character.otherDirection, distance);
     this.botles.push(bottle);
@@ -190,7 +189,6 @@ checkInterval(){
           this.cooldown = false;
   }, this.cooldownTimer);
 }
-
 
 restartGame() {
   if(this.character.health == 0 || this.ui.currentUI == 'exit'){
