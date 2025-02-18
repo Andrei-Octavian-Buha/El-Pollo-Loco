@@ -9,7 +9,9 @@ class Character extends MovableObject {
   speed = 10;
   health = 100;
   botleLoot = 0;
+  coinsLoot = 0;
   currentImage = 0;
+
 
   offset = {
     top:120,

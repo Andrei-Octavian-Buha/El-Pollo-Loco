@@ -17,7 +17,7 @@ constructor() {
     this.width= 200;
     this.height= 40;
     this.loadImages(this.IMAGES_COINS);
-    this.setPertange(60);
+    this.setPertange(0);
 }
 
 setPertange(percentage){

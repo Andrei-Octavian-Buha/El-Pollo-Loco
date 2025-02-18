@@ -35,6 +35,16 @@ setWorld() {
   this.ui.world = this;
 }
 
+checkCoinsLoot(){
+  this.level.coins.forEach((coin, coinIndex) => {
+    if(this.character.isColliding(coin)){
+      this.character.coinsLoot += 2;
+      this.statusBar[2].setPertange(this.character.coinsLoot);
+      this.level.coins.splice(coinIndex,1);
+    }
+  });
+}
+
 checkBotleLoot(){
   this.level.loot.forEach((botle, bottleIndex )=>{
     if(this.character.isColliding(botle)){
@@ -112,6 +122,7 @@ draw() {
         this.addObjectsToMap(this.statusBar);
         this.checkBottleCollision();
         this.checkCollisions(); 
+        this.checkCoinsLoot();
         this.checkBotleLoot();
         this.restartGame();
       }
@@ -128,6 +139,7 @@ addArrayObjectToGame(){
   this.addObjectsToMap(this.level.backgroundObjects);
   this.addObjectsToMap(this.level.clouds);
   this.addObjectsToMap(this.level.loot);
+  this.addObjectsToMap(this.level.coins);
   this.addObjectsToMap(this.level.enemies);
   this.addObjectsToMap(this.botles);
 }

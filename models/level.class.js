@@ -4,6 +4,7 @@ class Level {
   clouds;
   backgroundObjects;
   loot;
+  coins;
   level_end_x = (1024 * 6) + 150;
   y = 430;
   characterX;
@@ -11,15 +12,18 @@ class Level {
   endGameBossIntverval;
   endgame = false;
   lastX = 0;
+  lastY = 420;
 
-  constructor(enemies, clouds, loot,  backgroundObjects, world) {
+  constructor(enemies, clouds, loot, coins,  backgroundObjects, world) {
     this.enemies = enemies;
     this.clouds = clouds;
     this.loot = loot;
+    this.coins = coins;
     this.backgroundObjects = backgroundObjects;
     this.world = world;
     this.addEnemiesToGame();
     this.addBottleToLevel();
+    this.addCoinsToLevel();
   }
 
   addEnemiesToGame() {
@@ -44,7 +48,7 @@ class Level {
           this.enemies.push(new Chicken(this.y, this.characterX, this.world));
         }
       }
-      if(this.world.character.x > 1023*6 -300){
+      if(this.world.character.x > 1023 * 6 - 300){
         this.endgame = true;
       }
     }, 1500);
@@ -67,6 +71,16 @@ class Level {
       console.log(`Added BottleLoot with x-coordinate: ${x} at index: ${i}`);
     }
   }
+
+  addCoinsToLevel(){
+    for (let i = 0; i <= 50; i++) {
+      let x = this.lastX + 800 + Math.random() * (6000-400);
+      let y = this.lastY - Math.random() * 80;
+      this.coins.push(new CoinsLoot(x, y));
+      console.log(`Added CoinsLoot with x-coordinate: ${x} at index: ${i}`);
+    }
+  }
+
 
   isGameOnPause(){
     if(this.world){
