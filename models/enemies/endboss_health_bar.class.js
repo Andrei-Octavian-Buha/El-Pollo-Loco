@@ -15,7 +15,7 @@ class EnemyBar extends DrawableObject{
         this.x = 750;
         this.y = 0;
         this.width= 256;
-        this.height= 128;
+        this.height= 64;
         this.loadImage("img/7_statusbars/2_statusbar_endboss/blue/blue100.png");
         this.loadImages(this.IMAGES_BOTTLE);
         this.setPertange(100);

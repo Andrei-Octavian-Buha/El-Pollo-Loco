@@ -8,7 +8,7 @@ class Character extends MovableObject {
 
   speed = 10;
   health = 100;
-  botleLoot = 0;
+  botleLoot = 150;
   coinsLoot = 0;
   currentImage = 0;
 
@@ -16,7 +16,7 @@ class Character extends MovableObject {
   offset = {
     top:120,
     bottom:15,
-    right: 55,
+    right: 65,
     left:45,
   }
 

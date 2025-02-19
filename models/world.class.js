@@ -62,7 +62,7 @@ checkBottleCollision() {
           if(enemy.health > 0){
             if(this.level.endgame == true){
               enemy.hit();
-              enemy.health -= 100;
+              enemy.health -= 5;
               this.statusBar[3].setPertange(enemy.health);
               this.botles.splice(bottleIndex, 1);
             }else{
@@ -92,11 +92,11 @@ checkCollisions(){
         }else if(enemy.health > 0){              
           this.character.hit(); 
           if(this.level.endgame == true){
-            this.character.health -= 5;
+            this.character.health -= 0;
             this.statusBar[0].setPertange(this.character.health);
             console.log("Health", this.character.health);
           }else{
-            this.character.health -= 3;
+            this.character.health -= 0;
             this.statusBar[0].setPertange(this.character.health);
             console.log("Health", this.character.health);
           }
@@ -104,8 +104,6 @@ checkCollisions(){
       }
     });
 }
-
-
 
 draw() {
   if(this.gameOver){
@@ -133,7 +131,6 @@ draw() {
     });
   }
 }
-
 
 addArrayObjectToGame(){
   this.addObjectsToMap(this.level.backgroundObjects);

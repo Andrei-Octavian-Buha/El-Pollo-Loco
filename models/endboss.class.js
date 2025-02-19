@@ -5,7 +5,7 @@ class Endboss extends MovableObject {
   x;
   world;
   health = 100;
-  speed = 10;
+  speed = 5;
   isAttacking = false;
 
   offset = {
@@ -72,7 +72,6 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.x = x;
-    this.speed = 0.5;
     this.world = world;
     this.walk(); 
     this.changesize();
@@ -95,7 +94,6 @@ class Endboss extends MovableObject {
   walk() {
     setInterval(() => {
       if(this.isAttacking){
-        console.log("Bosul este in Modul ATTACK",this.isAttacking);
         return;
       }else {
         if(this.x > this.world.character.x + 20){
@@ -140,25 +138,59 @@ class Endboss extends MovableObject {
         this.speed = 10;
           let hpAttack = setInterval(() => {
           if(this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right)){
-            console.log("A existat un contact");
             this.isAttacking == true;
             this.moves[9] == true;
             this.x += 500;
+            setTimeout(() => {
+              this.speed = 0.5;
+            }, 3000);
+            this.speed = 5;
             clearInterval(hpAttack);
-            this.speed = 0.5;
           }
         }, 1000/30);
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 80) {
+        this.width = this.width / 2;
+        this.height = this.heihgt / 2;
+        this.speed = 5;
+        this.moves[8] == true;
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 70) {
+          if (this.health == 70 && this.moves[7] == false) {
+            this.speed = 10;
+            let hpAttack = setInterval(() => {
+            if(this.isColliding()){
+              this.isAttacking == true;
+              this.moves[7] == true;
+              this.x += 300;
+              setTimeout(() => {
+                this.speed = 0.5;
+              }, 5000);
+              this.speed = 5;
+              clearInterval(hpAttack);
+          }
+        }, 1000/30);
+        console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 60) {
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 50) {
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 40) {
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 30) {
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 20 && this.moves[2] == false) {
         this.health = 30;
         this.moves[2] = true;
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health == 10) {
+      console.log(`Endboss health is ${this.health}`);
       } else if (this.health >= 1) {
+      console.log(`Endboss health is ${this.health}`);
       }
+    }
+  }
+  isColliding(){
+    return  this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right);
   }
 }
