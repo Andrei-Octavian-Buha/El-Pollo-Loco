@@ -29,16 +29,16 @@ class DrawableObject{
     });
   }
     
-  drawFrameOffset(ctx) { 
-    if(this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof CoinsLoot || this instanceof BotleLoot || this instanceof ThrowableObject){
-        ctx.beginPath();
-        ctx.lineWidth = "3";
-        ctx.strokeStyle = 'red'; // Poți schimba culoarea
-        ctx.rect(this.x + this.offset.left,
-          this.y + this.offset.top,
-          this.width - this.offset.right - this.offset.left,
-          this.height -this.offset.top - this.offset.bottom); // Desenează pătratul în zona de intersecție
-        ctx.stroke();
-    }
-  }
+  // drawFrameOffset(ctx) { 
+  //   if(this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof CoinsLoot || this instanceof BotleLoot || this instanceof ThrowableObject){
+  //       ctx.beginPath();
+  //       ctx.lineWidth = "3";
+  //       ctx.strokeStyle = 'red'; // Poți schimba culoarea
+  //       ctx.rect(this.x + this.offset.left,
+  //         this.y + this.offset.top,
+  //         this.width - this.offset.right - this.offset.left,
+  //         this.height -this.offset.top - this.offset.bottom); // Desenează pătratul în zona de intersecție
+  //       ctx.stroke();
+  //   }
+  // }
 }

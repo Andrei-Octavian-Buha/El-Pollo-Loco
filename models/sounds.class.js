@@ -1,10 +1,16 @@
 class Sounds {
+
+    audios = [
+        "../sounds/jump-up-245782.mp3",
+        "../sounds/ouchmp3-14591.mp3",
+        "../sounds/snow-step-3-81065.mp3",
+        "../sounds/chicken-cluking-type-3-293320.mp3",
+        "../sounds/collect-5930.mp3",
+    ];
+
     constructor(){
-        this.jump = new Audio ("sounds/jump-up-245782.mp3");
-        this.takeDamage = new Audio ("sounds/ouchmp3-14591.mp3");
-        this.walk = new Audio("sounds/snow-step-3-81065.mp3");
-        this.chickenDamage = new Audio("sounds/chicken-cluking-type-3-293320.mp3");
-        this.collectBottle = new Audio("sounds/collect-5930.mp3");
+
+
     }
 
     cleanupSound(sound) {
@@ -13,30 +19,31 @@ class Sounds {
         sound.src = "";  // Clear the source to help release memory
     }
 
-     playSoundForDuration(sound, duration = 500) {
-        sound.play();
+     playSoundForDuration(sound, duration) {
+        let sounds = new Audio(sound);
+        sounds.play();
         setTimeout(() => {
-            this.cleanupSound(sound);  // Clean up the sound after duration
+            this.cleanupSound(sounds);
         }, duration);
     }
 
     playJump() {
-        this.playSoundForDuration(this.jump, 300); 
+        this.playSoundForDuration(this.audios[0], 300); 
     }
 
     playTakeDamage() {
-        this.playSoundForDuration(this.takeDamage, 500);
+        this.playSoundForDuration(this.audios[1], 500);
     }
 
     playWalk() {
-        this.playSoundForDuration(this.walk, 500);
+        this.playSoundForDuration(this.audios[2], 500);
     }
 
     playChickenDamage() {
-        this.playSoundForDuration(this.chickenDamage, 200);
+        this.playSoundForDuration(this.audios[3], 200);
     }
     playCollectBottle() {
-        this.playSoundForDuration(this.collectBottle, 200);
+        this.playSoundForDuration(this.audios[4], 200);
     } 
 }
 

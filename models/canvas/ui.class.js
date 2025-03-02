@@ -31,11 +31,11 @@ paths = {
     btnSetting:"img/gui/buttons-text/setting.png",
     btnA:"img/keys/A.png",
     btnS:"img/keys/S.png",
-    btnD:"img/keys/d.png",
+    btnD:"img/keys/D.png",
     btnArrowLeft:"img/keys/ARROWLEFT.png",
     btnArrowRight:"img/keys/ARROWRIGHT.png",
     btnSpace:"img/keys/SPACE.png",
-    btnEscape:"img/keys/Esc.png",
+    btnEscape:"img/keys/ESC.png",
 };
 
   constructor(world){

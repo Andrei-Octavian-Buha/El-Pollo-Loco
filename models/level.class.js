@@ -1,6 +1,7 @@
 class Level {
   world;
   enemies;
+  endbosss;
   clouds;
   backgroundObjects;
   loot;
@@ -14,7 +15,8 @@ class Level {
   lastX = 0;
   lastY = 420;
 
-  constructor(enemies, clouds, loot, coins,  backgroundObjects, world) {
+  constructor(endbosss, enemies, clouds, loot, coins,  backgroundObjects, world) {
+    this.endbosss = endbosss;
     this.enemies = enemies;
     this.clouds = clouds;
     this.loot = loot;
@@ -49,7 +51,7 @@ class Level {
           this.enemies.push(new Chicken(this.y, this.characterX, this.world));
         }
       }
-      if(this.world.character.x >= 400){
+      if(this.world.character.x >= 5000){
         this.endgame = true;
       }
     }, 1500);
@@ -59,7 +61,7 @@ class Level {
     clearInterval(this.spawnEnemies);
     clearInterval(this.endGameBossInterval);
     this.spawnEnemies = null;
-    this.enemies.push(new Endboss(this.characterX + 300, this.world)); 
+    this.endbosss.push(new Endboss(this.characterX + 300, this.world)); 
     if(this.world){
       this.world.testLevelToWorld();
     }

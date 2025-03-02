@@ -84,13 +84,16 @@ class Endboss extends MovableObject {
       this.width = 40;
       this.height= 70;
       this.y = 420;
+      this.world.collisionWithEndBoss = true;
       setTimeout(() => {
         this.width = 128;
         this.height = 256;
         this.y = 240;
+        this.world.collisionWithEndBoss = false;
       },2000 );
     }, 5000);
   }
+
   walk() {
     setInterval(() => {
       if(this.isAttacking){
@@ -135,61 +138,69 @@ class Endboss extends MovableObject {
 
   endbossAtackMovemet(){ 
       if (this.health == 90 && this.moves[9] == false) {
-        this.speed = 10;
-          let hpAttack = setInterval(() => {
-          if(this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right)){
-            this.isAttacking == true;
-            this.moves[9] == true;
-            this.x += 500;
-            setTimeout(() => {
-              this.speed = 0.5;
-            }, 3000);
-            this.speed = 5;
-            clearInterval(hpAttack);
-          }
-        }, 1000/30);
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 80) {
-        this.width = this.width / 2;
-        this.height = this.heihgt / 2;
-        this.speed = 5;
-        this.moves[8] == true;
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 70) {
-          if (this.health == 70 && this.moves[7] == false) {
-            this.speed = 10;
-            let hpAttack = setInterval(() => {
-            if(this.isColliding()){
-              this.isAttacking == true;
-              this.moves[7] == true;
-              this.x += 300;
-              setTimeout(() => {
-                this.speed = 0.5;
-              }, 5000);
-              this.speed = 5;
-              clearInterval(hpAttack);
-          }
-        }, 1000/30);
-        console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 60) {
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 50) {
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 40) {
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 30) {
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 20 && this.moves[2] == false) {
+        this.isHealth90();
+        this.spawnEnemies();
+      }else if (this.health == 70 && this.moves[8] == false) {
+        this.spawnEnemies()
+      }else if (this.health == 70 && this.moves[7] == false) {
+        this.isHealth70();
+      }else if (this.health == 70 && this.moves[6] == false) {
+        this.spawnEnemies()
+      }else if (this.health == 70 && this.moves[5] == false) {
+        this.spawnEnemies()
+      }else if (this.health == 70 && this.moves[4] == false) {
+        this.spawnEnemies()
+      }else if (this.health == 70 && this.moves[3] == false) {
+        this.spawnEnemies()
+      }else if (this.health == 20 && this.moves[2] == false) {
         this.health = 30;
         this.moves[2] = true;
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health == 10) {
-      console.log(`Endboss health is ${this.health}`);
-      } else if (this.health >= 1) {
+      }else if (this.health >= 1 & this.health <=10) {
       console.log(`Endboss health is ${this.health}`);
       }
     }
+
+  isHealth90(){
+    this.speed = 10;
+    let hpAttack = setInterval(() => {
+      if(this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right)){
+        this.isAttacking == true;
+        this.moves[9] == true;
+        this.x += 500;
+        setTimeout(() => {
+          this.speed = 0.5;
+        }, 3000);
+        this.speed = 5;
+        clearInterval(hpAttack);
+        }
+    }, 1000/30);
   }
+
+  spawnEnemies(){
+    let iEnemies = Math.floor(Math.random() * 10) +1;
+    let xEnemies = Math.floor(Math.random() * 101) +200;
+    this.x += xEnemies
+    for (let i = 0; i <= iEnemies;  i++) {
+      this.world.level.enemies.push(new Chicken(430,this.x,this.world));
+    }
+  }
+
+  isHealth70(){
+      this.speed = 10;
+      let hpAttack = setInterval(() => {
+      if(this.isColliding()){
+        this.isAttacking == true;
+        this.moves[7] == true;
+        this.x += 300;
+        setTimeout(() => {
+          this.speed = 0.5;
+        }, 5000);
+        this.speed = 5;
+        clearInterval(hpAttack);
+      }
+    }, 1000/30);
+  }
+
   isColliding(){
     return  this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right);
   }

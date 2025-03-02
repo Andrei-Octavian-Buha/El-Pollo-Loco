@@ -10,9 +10,11 @@ statusBar = [new HealthBar(), new BottleLootBar(), new Coins()];
 gamePaused = true;
 ui = new UI();
 botles = [new ThrowableObject()];
+sounds = new Sounds();
 cooldown = false;
 cooldownTimer = 500;
 gameOver = false;
+collisionWithEndBoss = false;
 
 constructor(canvas, keyboard) {
   this.ctx = canvas.getContext("2d");
@@ -41,6 +43,7 @@ checkCoinsLoot(){
       this.character.coinsLoot += 2;
       this.statusBar[2].setPertange(this.character.coinsLoot);
       this.level.coins.splice(coinIndex,1);
+      this.sounds.playCollectBottle(); 
     }
   });
 }
@@ -56,53 +59,64 @@ checkBotleLoot(){
 }
 
 checkBottleCollision() {
-    this.botles.forEach((bottle, bottleIndex) => {
-      this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy)) {
-          if(enemy.health > 0){
+  this.botles.forEach((bottle, bottleIndex) => {
+    this.level.enemies.forEach((enemy) => {
+      if (bottle.isColliding(enemy)) {
+            enemy.health -= 50;
+            this.botles.splice(bottleIndex, 1);
+          }
+        });
+      });
+}
+
+checkBottleEndboossCollision() {
+  this.botles.forEach((bottle, bottleIndex) => {
+    this.level.endbosss.forEach((enemy) => {
+      if (bottle.isColliding(enemy)) {
+        if(enemy.health > 0){
+            enemy.hit();
+            enemy.health -= 5;
+            this.statusBar[3].setPertange(enemy.health);
+            this.botles.splice(bottleIndex, 1);
+          }
+          if (enemy.health <= 0) {
             if(this.level.endgame == true){
-              enemy.hit();
-              enemy.health -= 5;
-              this.statusBar[3].setPertange(enemy.health);
-              this.botles.splice(bottleIndex, 1);
-            }else{
-              enemy.health -= 50;
-              this.botles.splice(bottleIndex, 1);
-            } 
-            if (enemy.health <= 0) {
-              if(this.level.endgame == true){
-                this.gameOver = true;
-              }
+              this.gameOver = true;
             }
           }
         }
-      });
     });
+  });
 }
 
 checkCollisions(){
     this.level.enemies.forEach((enemy)=>{
       if(this.character.isColliding(enemy)){
         if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy)){
-          if(this.level.endgame == true){
-            return;
-          }else{
             enemy.health = 0; 
-          }
         }else if(enemy.health > 0){              
           this.character.hit(); 
-          if(this.level.endgame == true){
-            this.character.health -= 0;
+            this.character.health -= 1;
             this.statusBar[0].setPertange(this.character.health);
-            console.log("Health", this.character.health);
-          }else{
-            this.character.health -= 0;
-            this.statusBar[0].setPertange(this.character.health);
-            console.log("Health", this.character.health);
-          }
         }
       }
     });
+}
+
+checkEndbossCollisons(){
+  this.level.endbosss.forEach((enemy)=>{
+    if(this.character.isColliding(enemy) ){
+      if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy) && this.collisionWithEndBoss){
+          enemy.health -= 10;
+          this.statusBar[3].setPertange(enemy.health);
+          this.collisionWithEndBoss = false; 
+      }else if(enemy.health > 0){
+          this.character.hit(); 
+          this.character.health -= 1;
+          this.statusBar[0].setPertange(this.character.health);
+      }
+    }
+  });
 }
 
 draw() {
@@ -119,7 +133,9 @@ draw() {
         this.ctx.translate(-this.camera_x, 0);
         this.addObjectsToMap(this.statusBar);
         this.checkBottleCollision();
+        this.checkBottleEndboossCollision();
         this.checkCollisions(); 
+        this.checkEndbossCollisons()
         this.checkCoinsLoot();
         this.checkBotleLoot();
         this.restartGame();
@@ -138,6 +154,7 @@ addArrayObjectToGame(){
   this.addObjectsToMap(this.level.loot);
   this.addObjectsToMap(this.level.coins);
   this.addObjectsToMap(this.level.enemies);
+  this.addObjectsToMap(this.level.endbosss);
   this.addObjectsToMap(this.botles);
 }
 
@@ -152,7 +169,7 @@ addToMap(mo) {
     this.flipImage(mo);
   }
   mo.draw(this.ctx);
-  mo.drawFrameOffset(this.ctx);
+  // mo.drawFrameOffset(this.ctx);
   if (mo.otherDirection) {
     this.flipImageBack(mo);
   }
