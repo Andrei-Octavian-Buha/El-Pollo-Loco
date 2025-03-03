@@ -107,30 +107,42 @@ class Character extends MovableObject {
               this.world.keyboard.SPACE && !this.isAboveGround()) || 
               this.world.keyboard.SPACE && !this.isAboveGround()) {
                   this.jump();
+                  if (!this.world.cooldown) {
+                    this.world.sounds.playJump();
+                    this.world.checkInterval(350);
+                  }
         }
         else if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x)
         {
           this.moveRight();
           this.otherDirection = false;
+          if (!this.world.cooldown) {
+            this.world.sounds.playWalk();
+            this.world.checkInterval(350);
+          }
         }
         else if (this.world.keyboard.LEFT && this.x > 150) {
           this.moveToLeft();
           this.otherDirection = true;
+          if (!this.world.cooldown) {
+            this.world.sounds.playWalk();
+            this.world.checkInterval(350);
+          }
         }else if(this.botleLoot > 0 && !this.world.cooldown){
           if(this.world.keyboard.D ){
-            this.world.checkInterval();
+            this.world.checkInterval(300);
             this.world.throwBottle(20);
             this.botleLoot -=  1;
             console.log(`Mai ai ${this.botleLoot}`);
             this.world.statusBar[1].setPertange(this.world.character.botleLoot);
           }else if(this.world.keyboard.S ){
-            this.world.checkInterval();
+            this.world.checkInterval(300);
             this.world.throwBottle(15);
             this.botleLoot -=  1;              
             console.log(`Mai ai ${this.botleLoot}`);
             this.world.statusBar[1].setPertange(this.world.character.botleLoot);
           }else if(this.world.keyboard.A ){
-            this.world.checkInterval();
+            this.world.checkInterval(300);
             this.world.throwBottle(10);
             this.botleLoot -=  1;
             console.log(`Mai ai ${this.botleLoot}`);
@@ -154,11 +166,11 @@ class Character extends MovableObject {
     setInterval(() => {
       if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
         this.playAnimation(this.IMAGES_WALKING);
-        // this.sound.walk.play();
       }else if(this.isDead()){
         this.playAnimation(this.IMAGES_DEAD);
       }else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
+        this.world.sounds.playTakeDamage();
       }
     }, 150);
     setInterval(() => {

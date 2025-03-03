@@ -1,10 +1,10 @@
 class Wolken extends MovableObject {
   y = 0;
   height = 150;
-  constructor(imagePath) {
+  constructor(imagePath,x) {
     super().loadImage(imagePath);
-    this.x = 0 + Math.random(1024) * 500;
-    this.width = 700;
+    this.x = x;
+    this.width = 1024;
     this.animate();
   }
 

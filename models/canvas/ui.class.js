@@ -15,6 +15,8 @@ uWidth;
 uHeight;
  
 paths = {
+  soundOff: "img/gui/btn/sound_off.png",
+  soundOn: "img/gui/btn/sound.png",
   youWin: "img/9_intro_outro_screens/win/win_2.png",
   gameOver: "img/9_intro_outro_screens/game_over/game over.png",
   startBtn: "img/2.png",
@@ -126,6 +128,7 @@ paths = {
         this.world.ctx.fillText('Press to ESCAPE', 234, 460);
     this.backArrowBtn();
   }
+
     startControlsMenu() {
     this.world.ctx.font = '32px zabras';
     this.world.ctx.drawImage(this.images.bg, 0, 0, 1024, 576);
@@ -146,6 +149,14 @@ paths = {
     this.world.ctx.drawImage(this.images.btnEscape, this.baseX, 80 + 6 * (48 + this.spacing), 48, 48);
         this.world.ctx.fillText('Press to ESCAPE', 234, 460);
     this.backArrowBtn();
+  }
+
+  soundsUI(){
+    if(this.world && this.world.sounds.volume == 1){
+      this.world.ctx.drawImage(this.images.soundOn, 20, 156, 32, 32);
+    }else{
+      this.world.ctx.drawImage(this.images.soundOff, 20, 156, 32, 32);
+    }
   }
 
   // Settings Menu
@@ -171,6 +182,7 @@ paths = {
   resumeBtn() {
     this.world.ctx.drawImage(this.images.btnResume, 434, 131, 156, 56);
   }
+
   // Controls button
   controlsBtn() {
     this.world.ctx.drawImage(this.images.btnControls, 434, 187, 156, 56);
@@ -195,6 +207,13 @@ paths = {
   handleMouseClick(event) {
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
+    if (this.isMouseOverButton(mouseX, mouseY, 20, 156, 32, 32)) {
+      if(this.world && this.world.sounds.volume == 1){
+        this.world.sounds.volume = 0;
+      }else if(this.world && this.world.sounds.volume == 0 ){
+        this.world.sounds.volume = 1;
+      }
+    }
     if (this.isMouseOverButton(mouseX, mouseY, 354, 500, 316, 64)) {
       this.world.gamePaused = false; 
       this.currentUI = 'start'; 

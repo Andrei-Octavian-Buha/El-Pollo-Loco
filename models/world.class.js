@@ -12,7 +12,6 @@ ui = new UI();
 botles = [new ThrowableObject()];
 sounds = new Sounds();
 cooldown = false;
-cooldownTimer = 500;
 gameOver = false;
 collisionWithEndBoss = false;
 
@@ -54,6 +53,7 @@ checkBotleLoot(){
       this.character.botleLoot += 20;
       this.statusBar[1].setPertange(this.character.botleLoot);
       this.level.loot.splice(bottleIndex,1);
+      this.sounds.playCollectBottle();
     }
   });
 }
@@ -62,6 +62,7 @@ checkBottleCollision() {
   this.botles.forEach((bottle, bottleIndex) => {
     this.level.enemies.forEach((enemy) => {
       if (bottle.isColliding(enemy)) {
+        this.sounds.playChickenDamage();
             enemy.health -= 50;
             this.botles.splice(bottleIndex, 1);
           }
@@ -73,6 +74,7 @@ checkBottleEndboossCollision() {
   this.botles.forEach((bottle, bottleIndex) => {
     this.level.endbosss.forEach((enemy) => {
       if (bottle.isColliding(enemy)) {
+        this.sounds.playChickenDamage();
         if(enemy.health > 0){
             enemy.hit();
             enemy.health -= 5;
@@ -93,11 +95,18 @@ checkCollisions(){
     this.level.enemies.forEach((enemy)=>{
       if(this.character.isColliding(enemy)){
         if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy)){
-            enemy.health = 0; 
+          if(enemy.health > 0){
+            this.sounds.playChickenDamage();
+          }
+            enemy.health = 0;
         }else if(enemy.health > 0){              
-          this.character.hit(); 
-            this.character.health -= 1;
+          if (!this.cooldown) {  // Only trigger if the cooldown is not active
+            this.character.hit(); 
+            this.character.health -= 10;
             this.statusBar[0].setPertange(this.character.health);
+            this.sounds.playTakeDamage();
+            this.checkInterval(450);  // Start cooldown after the sound is played
+        }
         }
       }
     });
@@ -132,6 +141,7 @@ draw() {
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         this.addObjectsToMap(this.statusBar);
+        this.ui.soundsUI();
         this.checkBottleCollision();
         this.checkBottleEndboossCollision();
         this.checkCollisions(); 
@@ -199,8 +209,6 @@ putGameOnPause() {
   }
 }
 
-
-
 // CHARACTER - METHODEN 
 throwBottle(x){
   console.log(x);
@@ -209,11 +217,11 @@ throwBottle(x){
     this.botles.push(bottle);
 }
 
-checkInterval(){
+checkInterval(x){
   this.cooldown = true;
   setTimeout(() => {
           this.cooldown = false;
-  }, this.cooldownTimer);
+  }, x);
 }
 
 restartGame() {
