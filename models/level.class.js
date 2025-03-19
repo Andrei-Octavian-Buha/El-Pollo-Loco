@@ -42,18 +42,18 @@ class Level {
   addRandomEnemies(){
     if(this.spawnEnemies) return;
      this.spawnEnemies = setInterval(() => {
-      this.y = Math.floor(Math.random() * 10) + 420; // this.y  = 430 +  Math.random() * 30 - 20;
-      this.characterX = this.world.character.x;
-     if(this.isGameOnPause()){
-       return;
-     }else if(this.world && this.world.character.health > 0){
-        if(this.world.character.x > 350){
-          this.enemies.push(new Chicken(this.y, this.characterX, this.world));
+        this.y = Math.floor(Math.random() * 10) + 420; // this.y  = 430 +  Math.random() * 30 - 20;
+        this.characterX = this.world.character.x;
+        if(this.isGameOnPause()){
+          return;
+        }else if(this.world && this.world.character.health > 0){
+          if(this.world.character.x > 350){
+            this.enemies.push(new Chicken(this.y, this.characterX, this.world));
+          }
         }
-      }
-      if(this.world.character.x >= 5000){
-        this.endgame = true;
-      }
+        if(this.world.character.x >= 5000){
+          this.endgame = true;
+        }
     }, 1500);
   }
 

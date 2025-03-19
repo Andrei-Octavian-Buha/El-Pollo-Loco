@@ -8,4 +8,8 @@ class Keyboard {
   D = false;
   S = false;
   A = false;
+
+  constructor() {
+  }
 }
+

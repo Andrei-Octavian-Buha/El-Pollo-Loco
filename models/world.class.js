@@ -21,7 +21,7 @@ constructor(canvas, keyboard) {
   this.keyboard = keyboard;
     this.setWorld(); 
     this.draw()
-    this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
+    // this.canvas.addEventListener('click', (event) => this.ui.handleMouseClick(event));
 }
 
 testLevelToWorld(){
@@ -141,7 +141,6 @@ draw() {
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         this.addObjectsToMap(this.statusBar);
-        this.ui.soundsUI();
         this.checkBottleCollision();
         this.checkBottleEndboossCollision();
         this.checkCollisions(); 

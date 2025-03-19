@@ -1,0 +1,66 @@
+.startGame{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        background-image: url(../img/9_intro_outro_screens/start/startscreen_1.png);
+        background-size: cover;
+        background-position: center;
+}
+
+.startGameLayout{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    bottom: 3%;
+}
+.startGameBtn{
+    width: 150px;
+    height: 30px;
+    background-color: #4CAF50;
+    display: flex;
+    gap: 32px;
+}
+
+.controls{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: space-between;
+    flex-direction: column;
+    background-image: url(../img/5_background/4279652.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.controlsLayout{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    bottom: 3%;
+}
+.controlsText{
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 16px;
+    border-radius: 8px;
+}
+.controlsBtn{
+    width: 150px;
+    height: 30px;
+    background-color: #4CAF50;
+    display: flex;
+    gap: 32px;
+}

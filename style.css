@@ -2,51 +2,99 @@
     font-family: 'zabras';
     src:  url('./fonts/Zabars.ttf') format('truetype');
 } 
+
 body {
   font-family: zabras, sans-serif;
   font-size: 32px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  margin: 0;
+  align-items: center;
   background-image: url("./img/5_background/4279652.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;
-
+  margin: 0;
 }
-#fullscreen {
-  position: relative;
 
-}
 canvas {
   background-color: black;
   display: block;
   border: 1px solid;
 }
-.topNav {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: #333;
-  color: white;
+
+#fullscreen {
+  position: relative;
 }
-.bottomNav {
+
+.navBar {
   position: absolute;
-  z-index: 999;
-  bottom: 10px;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 10px;
-  background-color: #333;
+  flex-direction: column;
+}
+
+.topNav {
+  padding-top: 2%;
+  margin: 0 auto;
+  display: flex;
+  gap: 16px;
+  align-items: center;
   color: white;
 }
 
+.bottomNav {
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.bottomStartGame {
+  width: 150px;
+  height: 30px;
+  background-color: #4CAF50;
+  display: flex;
+  gap: 32px;
+}
+
+.bottomNavLeft{
+  display: flex;
+  gap: 32px;
+}
+.bottomNavRight{
+  display: flex;
+  gap: 32px;
+}
+
+.allBtnStyle {
+  height: 42px;
+}
+
+.desktop{
+  display: flex;
+}
+.mobile{
+  display: none;
+}
+.dNone{
+  display: none;
+}
+
 @media only screen and (max-width: 1024px){
-  #title{
+  body {
+    align-items: normal;
+  }
+  .mobile{
+    display: flex;
+  }
+  .desktop{
     display: none;
   }
   canvas{
@@ -56,8 +104,14 @@ canvas {
 }
 
 @media only screen and (max-height: 576px){
-  #title{
+  body {
+    align-items: normal;
+  }
+  .desktop{
     display: none;
+  }
+  .mobile{
+    display: flex;
   }
   canvas{
     height: 100vh;
