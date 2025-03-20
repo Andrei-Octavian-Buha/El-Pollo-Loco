@@ -32,6 +32,7 @@ uHeight;
           this.world.gamePaused = false;
           document.getElementById("startGameLayoutId").style.display = "none";
           document.getElementById("mobileControlsBarId").style.display = "flex";
+          document.getElementById("guiId").style.display = "flex";
         });
 
         document.getElementById("startGameControls").addEventListener("click", (e) => {
@@ -49,6 +50,7 @@ uHeight;
 
         break;
       case 'pause':
+        document.getElementById("gameOnPauseMenu").style.display = "flex";
         break;
       case 'controls':
         break;
@@ -57,7 +59,6 @@ uHeight;
       case 'about':
         break;
       default:
-        // this.drawPauseMenu();
         break;
     }
   }

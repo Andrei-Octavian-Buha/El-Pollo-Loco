@@ -68,83 +68,132 @@ window.addEventListener("keyup", (event) => {
   }
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   // controlsMobile();
-//   document.getElementById("startGame").addEventListener("click", (e) => {
-//     e.preventDefault();
-//     // world.ui.currentUI = "start";
-//   });
-//   document.getElementById("startGame").addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     world.ui.currentUI = "start";
-//   });
+document.addEventListener("DOMContentLoaded", () => {
+  let btnSound = document.getElementById("btnSound");
+  controlsMobile();
+  clickOnPause();
+  resummeGame();
+  resummeGame2();
+  clickOnControls();
+  exitGame();
 
-//   let btnSound = document.getElementById("btnSound");
+    btnSound.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    let img = document.getElementById("btnSound");
+    if(world.sounds.volume == 1){
+      world.sounds.volume = 0;
+      img.src = "./img/gui/btn/sound_off.png";
+    }
+    else{
+      world.sounds.volume = 1;
+      img.src = "./img/gui/btn/sound.png";
+    }
+  });
 
-//     btnSound.addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     let img = document.getElementById("btnSound");
-//     if(world.sounds.volume == 1){
-//       world.sounds.volume = 0;
-//       img.src = "./img/gui/btn/sound_off.png";
-//     }
-//     else{
-//       world.sounds.volume = 1;
-//       img.src = "./img/gui/btn/sound.png";
-//     }
-//   });
+    btnSound.addEventListener("click", (e) => {
+      e.preventDefault();
+      let img = document.getElementById("btnSound");
+      if(world.sounds.volume == 1){
+        world.sounds.volume = 0;
+        img.src = "./img/gui/btn/sound_off.png";
+      }
+      else{
+        world.sounds.volume = 1;
+        img.src = "./img/gui/btn/sound.png";
+      }
+    });
+  });
 
-//     btnSound.addEventListener("click", (e) => {
-//       e.preventDefault();
-//       let img = document.getElementById("btnSound");
-//       if(world.sounds.volume == 1){
-//         world.sounds.volume = 0;
-//         img.src = "./img/gui/btn/sound_off.png";
-//       }
-//       else{
-//         world.sounds.volume = 1;
-//         img.src = "./img/gui/btn/sound.png";
-//       }
-//     });
-//   });
 
-// function controlsMobile(){
-//   document.getElementById("btnLeft").addEventListener("touchstart", (e) => {
-//     e.preventDefault();
-//     keyboard.LEFT = true;
-//   });
-//   document.getElementById("btnLeft").addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     keyboard.LEFT = false;
-//   });
+function exitGame(){
+  let exit = document.getElementById("btnExit");
+  exit.addEventListener("click", (e) => {
+    e.preventDefault();
+    world.ui.currentUI = 'exit';
+    world.restartGame();
+    world.draw();
+  });
+}
 
-//   document.getElementById("btnRight").addEventListener("touchstart", (e) => {
-//     e.preventDefault();
-//     keyboard.RIGHT = true;
-//   });
-//   document.getElementById("btnRight").addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     keyboard.RIGHT = false;
-//   });
+function clickOnPause(){
+  let onPause = document.getElementById("btnPause");
+  onPause.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+  });
+  onPause.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    world.gamePaused = true;
+    document.getElementById("gameOnPauseMenu").style.display = "flex";
+  });
+  onPause.addEventListener("click", (e) => {
+    e.preventDefault();
+    world.gamePaused = true;
+    document.getElementById("gameOnPauseMenu").style.display = "flex";
+  });
+}
 
-//   document.getElementById("btnJump").addEventListener("touchstart", (e) => {
-//     e.preventDefault();
-//     keyboard.SPACE = true;
-//   });
-//   document.getElementById("btnJump").addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     keyboard.SPACE = false;
-//   });
+function clickOnControls(){
+  let onPause = document.getElementById("btnInfo");
+  onPause.addEventListener("click", (e) => {
+    e.preventDefault(); 
+    world.gamePaused = true;
+    document.getElementById("controlsOnPauseMenu").style.display = "flex";
+  });
 
-//   document.getElementById("btnThrow").addEventListener("touchstart", (e) => {
-//     e.preventDefault();
-//     keyboard.D = true;
-//   });
-//   document.getElementById("btnThrow").addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     keyboard.D = false;
-//   });
-// }
+}
+
+function resummeGame(){
+  let resumme = document.getElementById("btnResume");
+  resumme.addEventListener("click", (e) => {
+    e.preventDefault();
+    world.putGameOnPause();
+  });
+}
+function resummeGame2(){
+  let resumme = document.getElementById("btnResume2");
+  resumme.addEventListener("click", (e) => {
+    e.preventDefault();
+    world.putGameOnPause();
+  });
+}
+
+function controlsMobile(){
+  document.getElementById("btnLeft").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.LEFT = true;
+  });
+  document.getElementById("btnLeft").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.LEFT = false;
+  });
+
+  document.getElementById("btnRight").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.RIGHT = true;
+  });
+  document.getElementById("btnRight").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.RIGHT = false;
+  });
+
+  document.getElementById("btnJump").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.SPACE = true;
+  });
+  document.getElementById("btnJump").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.SPACE = false;
+  });
+
+  document.getElementById("btnThrow").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.D = true;
+  });
+  document.getElementById("btnThrow").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.D = false;
+  });
+}
 
 function toggleFullScreen() {
   if (!document.fullscreenElement) {

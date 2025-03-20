@@ -37,15 +37,14 @@
     <div id="fullscreen">
       <div  id="startGameLayoutId" class="startGame">
         <div  class="startGameLayout">
-          <button id="startGame" class="startGameBtn">Start Game</button>
-          <button id="startGameControls" class="startGameBtn desktop">Controls</button>
+          <img id="startGame" class="allBtnStyle" src="./img/gui/btn/play.png" alt="">
+          <img id="startGameControls"  class="allBtnStyle desktop" src="./img/gui/btn/settings.png" alt="">
         </div>
       </div>
       <div id="controlsLayoutId" class="controls">
         <div class="controlsLayout">
-
           <div class="controlsText">
-            <button id="backToStartGame" class="startGameBtn">Back</button>
+            <img id="backToStartGame"  class="allBtnStyle" src="./img/gui/btn/prew.png" alt="">
             <h1>Controls</h1>
             <p>Jump: Space</p>
             <p>Move Left: Left Arrow</p>
@@ -58,8 +57,15 @@
           </div>
         </div>
       </div>
-      <div>
         <div id="mobileControlsBarId" class="navBar dNone">
+          <div id="guiId" class="navBar" style="display: none;">
+            <div class="topNav">
+              <img id="btnInfo" class="allBtnStyle desktop" src="./img/gui/btn/about.png" alt="">
+              <img id="btnSound" class="allBtnStyle" src="./img/gui/btn/sound.png" alt="">
+              <img id="btnPause" class="allBtnStyle" src="/img/gui/btn/pause.png" alt="">
+              <img id="btnFullscreen" class="allBtnStyle desktop" src="./img/gui/btn/01.png" alt="">
+            </div>
+          </div>
           <div class="bottomNav mobile">
             <div class="bottomNavLeft">
               <img id="btnLeft" class="allBtnStyle" src="./img/gui/btn/prew.png" alt="">
@@ -70,8 +76,28 @@
               <img id="btnThrow" class="allBtnStyle" style="height: 56px;" src="./img/gui/btn/throw.png" alt="">
             </div>
           </div>
+          <div id="gameOnPauseMenu" class="pauseLayout" style="display: none;">
+            <div class="pauseContainer">
+              <h2 style="color: aliceblue;">Game Paused</h2>
+              <p id="btnExit" style="font-size: 32px; cursor: pointer;">Exit</p>
+              <img id="btnResume" class="allBtnStyle" src="./img/gui/btn/play.png" alt="">
+            </div>
+          </div>
+          <div id="controlsOnPauseMenu" class="pauseLayout" style="display: none;">
+            <div class="pauseContainer">
+              <h2 style="color: aliceblue;">Controls</h2>
+                <p>Jump: Space</p>
+                <p>Move Left: Left Arrow</p>
+                <p>Move Right: Right Arrow</p>
+                <div style="display: flex; justify-content: space-between; gap:16px;">
+                  <p>Attack Short: A</p>
+                  <p>Attack Normal: S</p>
+                  <p>Attack Long: D</p>
+                </div>
+              <img id="btnResume2" class="allBtnStyle" src="./img/gui/btn/play.png" alt="">
+            </div>
+          </div>
       </div>
-
       <canvas id="canvas" width="1024" height="576"></canvas>
     </div>
   </body>

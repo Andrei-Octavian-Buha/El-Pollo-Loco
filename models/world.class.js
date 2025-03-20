@@ -197,15 +197,15 @@ flipImageBack(mo){
 }
 
 putGameOnPause() {
-  if (this.keyboard.ESC) { 
     this.gamePaused = !this.gamePaused; 
     if (this.gamePaused) {
-      this.ui.currentUI = 'pause'; 
+      this.ui.currentUI = 'pause';
       this.ui.drawUI(); 
     } else {
       this.ui.currentUI = 'resume'; 
+      document.getElementById("gameOnPauseMenu").style.display = "none";
+      document.getElementById("controlsOnPauseMenu").style.display = "none";
     }
-  }
 }
 
 // CHARACTER - METHODEN 
