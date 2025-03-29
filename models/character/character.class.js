@@ -1,18 +1,79 @@
+/**
+ * Represents a character (player) in the game.
+ * The character can perform actions like walking, jumping, and throwing bottles,
+ * as well as managing health, loot, and animations.
+ */
 class Character extends MovableObject {
+    /**
+   * The height of the character.
+   * @type {number}
+   */
   height = 280;
+
+    /**
+   * The width of the character.
+   * @type {number}
+   */
   width = 150;
+
+    /**
+   * The x-coordinate of the character's position.
+   * @type {number}
+   */
   x = 350;
+
+    /**
+   * The y-coordinate of the character's position.
+   * @type {number}
+   */
   y= 224;
+
+    /**
+   * The world the character is in.
+   * @type {Object}
+   */
   world;
+
+    /**
+   * The cooldown state for the character's actions.
+   * @type {boolean}
+   */
   cooldown = false;
 
+    /**
+   * The movement speed of the character.
+   * @type {number}
+   */
   speed = 10;
+
+    /**
+   * The health of the character.
+   * @type {number}
+   */
   health = 100;
+
+    /**
+   * The number of bottles the character has.
+   * @type {number}
+   */
   botleLoot = 1;
+
+    /**
+   * The number of coins the character has.
+   * @type {number}
+   */
   coinsLoot = 0;
+
+    /**
+   * The current image index for animation purposes.
+   * @type {number}
+   */
   currentImage = 0;
 
-
+  /**
+   * The offset values for the character's collision area.
+   * @type {Object}
+   */
   offset = {
     top:120,
     bottom:15,
@@ -20,6 +81,10 @@ class Character extends MovableObject {
     left:45,
   }
 
+    /**
+   * Array of image paths representing the character's idle animation.
+   * @type {string[]}
+   */
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
     "img/2_character_pepe/1_idle/idle/I-2.png",
@@ -32,6 +97,11 @@ class Character extends MovableObject {
     "img/2_character_pepe/1_idle/idle/I-9.png",
     "img/2_character_pepe/1_idle/idle/I-10.png",
   ];
+
+    /**
+   * Array of image paths representing the character's walking animation.
+   * @type {string[]}
+   */
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -41,6 +111,10 @@ class Character extends MovableObject {
     "img/2_character_pepe/2_walk/W-26.png",
   ];
 
+    /**
+   * Array of image paths representing the character's jumping animation.
+   * @type {string[]}
+   */
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
     "img/2_character_pepe/1_idle/idle/I-2.png",
@@ -55,6 +129,10 @@ class Character extends MovableObject {
 
   ];
 
+    /**
+   * Array of image paths representing the character's hurt animation.
+   * @type {string[]}
+   */
   IMAGES_JUMP = [
       "img/2_character_pepe/3_jump/J-31.png",
       "img/2_character_pepe/3_jump/J-32.png",
@@ -67,12 +145,20 @@ class Character extends MovableObject {
       "img/2_character_pepe/3_jump/J-39.png",
   ];
 
+    /**
+   * Array of image paths representing the character's death animation.
+   * @type {string[]}
+   */
   IMAGES_HURT = [
     "img/2_character_pepe/4_hurt/H-41.png",
     "img/2_character_pepe/4_hurt/H-42.png",
     "img/2_character_pepe/4_hurt/H-43.png"
   ];
 
+    /**
+   * Array of image paths representing the character's death animation.
+   * @type {string[]}
+   */
   IMAGES_DEAD = [
     "img/2_character_pepe/5_dead/D-51.png",
     "img/2_character_pepe/5_dead/D-52.png",
@@ -83,7 +169,10 @@ class Character extends MovableObject {
     "img/2_character_pepe/5_dead/D-57.png",
   ];
 
-
+  /**
+   * Creates an instance of the Character class.
+   * Initializes the character with idle, walking, jumping, hurt, and death animations.
+   */
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -95,6 +184,10 @@ class Character extends MovableObject {
     this.applyGravity();
   }
 
+    /**
+   * Handles the character's animations, movement, and interactions with the game world.
+   * The character can walk, jump, throw bottles, and respond to keyboard input.
+   */
   animate() {
     setInterval(() => {
       this.world.camera_x = -this.x + 200;
@@ -158,10 +251,13 @@ class Character extends MovableObject {
         this.playAnimation(this.IMAGES_IDLE);
       }
     }, 333);
-
     this.fastAnimation();
   }
 
+
+  /**
+   * Plays the walking, hurt, or dead animation based on the character's state.
+   */
   fastAnimation(){
     setInterval(() => {
       if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {

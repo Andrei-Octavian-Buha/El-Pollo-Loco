@@ -1,21 +1,46 @@
+/**
+ * Represents the game world containing characters, objects, and game logic.
+ */
 class World {
+/** @type {Character} The main character of the game. */
 character = new Character();
+
 mobj = new MovableObject();
+
 level = level1;
+
 canvas;
+/** @type {HTMLCanvasElement} The canvas element for rendering the game. */
 ctx;
+/** @type {Keyboard} The keyboard object for handling user input. */
 keyboard;
+/** @type {number} The x-coordinate of the camera. */
 camera_x = 350;
+/** @type {Array} An array of status bar objects. */
 statusBar = [new HealthBar(), new BottleLootBar(), new Coins()];
+/** @type {Array} An array of enemy objects. */
 gamePaused = true;
+/** @type {UI} The UI object for managing the user interface. */
 ui = new UI();
+/** @type {Array} An array of throwable objects (bottles). */
 botles = [new ThrowableObject()];
+/** @type {boolean} A flag indicating whether the game is in cooldown state. */
 sounds = new Sounds();
+/** @type {boolean} A flag indicating whether the game is over. */
 cooldown = false;
+/** @type {boolean} A flag indicating whether the player has lost the game. */
 gameOver = false;
+/** @type {boolean} A flag indicating whether the player has won the game. */
 youLose = false;
+/** @type {boolean} A flag indicating whether the game is in a paused state. */
 collisionWithEndBoss = false;
 
+
+  /**
+   * Creates a new World instance.
+   * @param {HTMLCanvasElement} canvas - The game canvas.
+   * @param {Keyboard} keyboard - The keyboard input handler.
+   */
 constructor(canvas, keyboard) {
   this.ctx = canvas.getContext("2d");
   this.canvas = canvas;
@@ -24,10 +49,16 @@ constructor(canvas, keyboard) {
     this.draw();
 }
 
+  /**
+   * Adds an enemy health bar to the status bar array (testing purposes).
+   */
 testLevelToWorld(){
   this.statusBar.push(new EnemyBar());
 }
 
+ /**
+   * Sets the world reference for the character, level, enemies, and UI.
+   */
 setWorld() {
   this.character.world = this;
   this.level.world = this;
@@ -36,6 +67,9 @@ setWorld() {
   this.ui.world = this;
 }
 
+  /**
+   * Checks if the character collects coins and updates the status bar.
+   */
 checkCoinsLoot(){
   this.level.coins.forEach((coin, coinIndex) => {
     if(this.character.isColliding(coin)){
@@ -47,6 +81,9 @@ checkCoinsLoot(){
   });
 }
 
+  /**
+   * Checks if the character collects bottles and updates the status bar.
+   */
 checkBotleLoot(){
   this.level.loot.forEach((botle, bottleIndex )=>{
     if(this.character.isColliding(botle)){
@@ -58,6 +95,9 @@ checkBotleLoot(){
   });
 }
 
+  /**
+   * Checks collisions between thrown bottles and enemies.
+   */
 checkBottleCollision() {
   this.botles.forEach((bottle, bottleIndex) => {
     this.level.enemies.forEach((enemy) => {
@@ -70,6 +110,9 @@ checkBottleCollision() {
       });
 }
 
+  /**
+   * Checks collisions between thrown bottles and the end boss.
+   */
 checkBottleEndboossCollision() {
   this.botles.forEach((bottle, bottleIndex) => {
     this.level.endbosss.forEach((enemy) => {
@@ -91,6 +134,9 @@ checkBottleEndboossCollision() {
   });
 }
 
+  /**
+   * Checks collisions between the character and enemies.
+   */
 checkCollisions(){
   this.level.enemies.forEach((enemy)=>{
     if(this.character.isColliding(enemy)){
@@ -117,6 +163,9 @@ checkCollisions(){
   });
 }
 
+  /**
+   * Checks collisions between the character and the end boss.
+   */
 checkEndbossCollisons(){
   this.level.endbosss.forEach((enemy)=>{
     if(this.character.isColliding(enemy) ){
@@ -140,6 +189,9 @@ checkEndbossCollisons(){
   });
 }
 
+  /**
+   * Main game draw loop. Renders the game world and checks game states.
+   */
 draw() {
   if(this.gameOver){
     if(this.youLose){
@@ -172,6 +224,9 @@ draw() {
   }
 }
 
+  /**
+   * Adds all game objects to the map (background, enemies, items, etc.).
+   */
 addArrayObjectToGame(){
   this.addObjectsToMap(this.level.backgroundObjects);
   this.addObjectsToMap(this.level.clouds);
@@ -182,12 +237,20 @@ addArrayObjectToGame(){
   this.addObjectsToMap(this.botles);
 }
 
+  /**
+   * Draws an array of objects on the map.
+   * @param {DrawableObject[]} objects - Array of objects to draw.
+   */
 addObjectsToMap(objects) {
   objects.forEach((o) => {
     this.addToMap(o);
   });
 }
 
+  /**
+   * Draws a single object on the map, handling flipped sprites.
+   * @param {DrawableObject} mo - The object to draw.
+   */
 addToMap(mo) {
   if (mo.otherDirection) {
     this.flipImage(mo);
@@ -198,6 +261,11 @@ addToMap(mo) {
   }
 }
 
+
+  /**
+   * Flips an image horizontally (for sprite direction changes).
+   * @param {DrawableObject} mo - The object to flip.
+   */
 flipImage(mo){
   this.ctx.save();
   this.ctx.translate(mo.width, 0);
@@ -205,11 +273,19 @@ flipImage(mo){
   mo.x = mo.x * -1;
 }
 
+  /**
+   * Restores a flipped image to its original state.
+   * @param {DrawableObject} mo - The object to restore.
+   */
 flipImageBack(mo){
   mo.x = mo.x * -1;
   this.ctx.restore();
 }
 
+
+  /**
+   * Toggles the game's paused state.
+   */
 putGameOnPause() {
   this.gamePaused = !this.gamePaused; 
   if (this.gamePaused) {
@@ -222,12 +298,20 @@ putGameOnPause() {
   }
 }
 
+  /**
+   * Throws a bottle from the character's position.
+   * @param {number} x - The throw direction/distance.
+   */
 throwBottle(x){
   let distance = x;
   let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100, this.character.otherDirection, distance);
   this.botles.push(bottle);
 }
 
+  /**
+   * Sets a cooldown period for actions.
+   * @param {number} x - Cooldown duration in milliseconds.
+   */
 checkInterval(x){
   this.cooldown = true;
   setTimeout(() => {
@@ -235,6 +319,9 @@ checkInterval(x){
   }, x);
 }
 
+  /**
+   * Resets the game to its initial state.
+   */
 restartGame() {
   if(this.character.health == 0 || this.ui.currentUI == 'exit'){
     this.ui.currentUI = 'start';

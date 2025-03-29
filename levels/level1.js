@@ -1,3 +1,4 @@
+// Create a new level with the provided parameters
 const  level1  = new Level(
     [],
     [],

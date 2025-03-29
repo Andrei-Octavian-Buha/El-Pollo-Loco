@@ -1,19 +1,72 @@
+/**
+ * Represents the end boss character in the game.
+ * The end boss moves, attacks, and reacts to the player's actions based on its health.
+ * The end boss also spawns additional enemies as its health decreases.
+ */
 class Endboss extends MovableObject {
+    /**
+   * Height of the end boss character.
+   * @type {number}
+   */
   height = 256;
+
+    /**
+   * Width of the end boss character.
+   * @type {number}
+   */
   width = 128;
+
+    /**
+   * Y-coordinate of the end boss position.
+   * @type {number}
+   */
   y = 240;
+
+    /**
+   * X-coordinate of the end boss position.
+   * @type {number}
+   */
   x;
+
+    /**
+   * Reference to the game world the end boss belongs to.
+   * @type {Object}
+   */
   world;
+
+    /**
+   * Health of the end boss.
+   * @type {number}
+   */
   health = 100;
+
+    /**
+   * Speed of the end boss.
+   * @type {number}
+   */
   speed = 5;
+
+   /**
+   * Indicates if the end boss is currently attacking.
+   * @type {boolean}
+   */
   isAttacking = false;
 
+    /**
+   * Offset for collision detection of the end boss.
+   * @type {Object}
+   */
   offset = {
     top:0,
     bottom:0,
     right:0,
     left:0
   }
+
+    /**
+   * An object to track the moves performed by the end boss based on health thresholds.
+   * @type {Object}
+   */
   moves = {
     1: false,
     2: false,
@@ -25,6 +78,11 @@ class Endboss extends MovableObject {
     8: false,
     9: false,
   }
+
+    /**
+   * Images representing the alert state of the end boss.
+   * @type {string[]}
+   */
   IMAGES_ALERT = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
     "img/4_enemie_boss_chicken/2_alert/G6.png",
@@ -36,6 +94,10 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/2_alert/G12.png"
   ];
 
+   /**
+   * Images representing the walking animation of the end boss.
+   * @type {string[]}
+   */
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
     "img/4_enemie_boss_chicken/1_walk/G2.png",
@@ -43,6 +105,10 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/1_walk/G4.png"
   ];
 
+    /**
+   * Images representing the attack animation of the end boss.
+   * @type {string[]}
+   */
   IMAGES_ATTACK = [
     "img/4_enemie_boss_chicken/3_attack/G13.png",
     "img/4_enemie_boss_chicken/3_attack/G14.png",
@@ -53,17 +119,33 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/3_attack/G19.png",
     "img/4_enemie_boss_chicken/3_attack/G20.png"
   ];
+
+    /**
+   * Images representing the hurt animation of the end boss.
+   * @type {string[]}
+   */
   IMAGES_HURT = [
     "img/4_enemie_boss_chicken/4_hurt/G21.png",
     "img/4_enemie_boss_chicken/4_hurt/G22.png",
     "img/4_enemie_boss_chicken/4_hurt/G23.png"
   ];
+
+
+    /**
+   * Images representing the dead animation of the end boss.
+   * @type {string[]}
+   */
   IMAGES_DEAD = [
     "img/4_enemie_boss_chicken/5_dead/G24.png",
     "img/4_enemie_boss_chicken/5_dead/G25.png",
     "img/4_enemie_boss_chicken/5_dead/G26.png"
   ];
 
+    /**
+   * Creates an instance of the `Endboss` class.
+   * @param {number} x - The x-coordinate of the end boss.
+   * @param {Object} world - The world object where the end boss exists.
+   */
   constructor(x, world) {
     super().loadImage("img/4_enemie_boss_chicken/1_walk/G1.png");
     this.loadImages(this.IMAGES_ALERT);
@@ -79,6 +161,9 @@ class Endboss extends MovableObject {
     this.checkEndBossHealth();
   }
 
+    /**
+   * Changes the size of the end boss periodically and updates its collision status.
+   */
   changesize(){
     setInterval(() => {
       this.width = 40;
@@ -94,6 +179,10 @@ class Endboss extends MovableObject {
     }, 5000);
   }
 
+  /**
+   * Makes the end boss move towards or away from the player.
+   * The movement is based on the x-coordinate of the player.
+   */
   walk() {
     setInterval(() => {
       if(this.isAttacking){
@@ -110,6 +199,10 @@ class Endboss extends MovableObject {
     }, 1000/30);
   }
 
+    /**
+   * Plays the intro animation of the end boss.
+   * The intro animation displays an alert sequence before starting to walk.
+   */
   playIntroAnimation(){
     let i = 0;
     let intv = setInterval(() => { 
@@ -123,6 +216,10 @@ class Endboss extends MovableObject {
     }, 84);
   }
 
+  /**
+   * Plays the walking animation of the end boss.
+   * If the end boss is hurt, the hurt animation is played instead.
+   */
   playWalkAnimation(){
     setInterval(() => {
       if (this.isHurt()) {
@@ -133,6 +230,10 @@ class Endboss extends MovableObject {
     },334);
   }
 
+    /**
+   * Plays the walking animation of the end boss.
+   * If the end boss is hurt, the hurt animation is played instead.
+   */
   checkEndBossHealth() {
     let lastHealth = this.health;
     let intv = setInterval(() => {
@@ -149,6 +250,10 @@ class Endboss extends MovableObject {
     }, 1000/30);
   }
 
+    /**
+   * Triggers specific attacks or movement actions based on the current health of the end boss.
+   * This method is called when the health of the end boss changes.
+   */
   endbossAtackMovemet(){ 
       if (this.health == 90 && this.moves[9] == false) {
         this.jumptocharacter();
@@ -174,12 +279,18 @@ class Endboss extends MovableObject {
       
       }
     }
+
+      /**
+   * Makes the end boss jump towards the player.
+   */
     jumptocharacter(){
       this.y = 200;
       setTimeout(() => {
         this.y = 240;
       }, 1000);
     }
+
+
   // isHealth90(){
   //   this.speed = 10;
   //   let hpAttack = setInterval(() => {
@@ -196,6 +307,9 @@ class Endboss extends MovableObject {
   //   }, 1000/30);
   // }
 
+    /**
+   * Spawns a random number of chickens at a random x position as additional enemies.
+   */
   spawnEnemies(){
     let iEnemies = Math.floor(Math.random() * 10) +1;
     let xEnemies = Math.floor(Math.random() * 101) + 600;
@@ -222,6 +336,10 @@ class Endboss extends MovableObject {
   //   }, 1000/30);
   // }
 
+    /**
+   * Checks if the end boss is colliding with the player character.
+   * @returns {boolean} - True if the end boss is colliding with the player, false otherwise.
+   */
   isColliding(){
     return  this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right);
   }

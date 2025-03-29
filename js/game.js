@@ -2,11 +2,19 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
+
+/**
+ * Initializes the game world and canvas.
+ */
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 }
 
+/**
+ * Listens for keydown events and updates the keyboard object accordingly.
+ * @param {KeyboardEvent} event - The keydown event object.
+ */
 window.addEventListener("keydown", (event) => {
   if (event.key == "ArrowRight") {
     keyboard.RIGHT = true;
@@ -40,6 +48,10 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
+/**
+ * Listens for keyup events and updates the keyboard object accordingly.
+ * @param {KeyboardEvent} event - The keyup event object.
+ */
 window.addEventListener("keyup", (event) => {
   if (event.key == "ArrowRight") {
     keyboard.RIGHT = false;
@@ -70,6 +82,9 @@ window.addEventListener("keyup", (event) => {
   }
 });
 
+/**
+ * Sets up event listeners for various UI elements when the document is ready.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   controlsMobile();
   clickOnPause();
@@ -81,11 +96,17 @@ document.addEventListener("DOMContentLoaded", () => {
   fullscreen();
 });
 
+/**
+ * Toggles sound on and off.
+ */
   function sound(){
     soundOn();
     soundOff();
   }
 
+  /**
+ * Toggles sound on and off.
+ */
   function soundOn(){
     let btnSound = document.getElementById("btnSound");
     btnSound.addEventListener("touchend", (e) => {
@@ -102,6 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  /**
+ * Event listener for turning sound off.
+ */
   function soundOff(){
     let btnSound = document.getElementById("btnSound");
     btnSound.addEventListener("click", (e) => {
@@ -118,6 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  /**
+ * Event listener for exiting the game.
+ */
 function exitGame(){
   let exit = document.getElementById("btnExit");
   exit.addEventListener("click", (e) => {
@@ -126,6 +153,9 @@ function exitGame(){
   });
 }
 
+/**
+ * Event listeners for the pause button.
+ */
 function clickOnPause(){
   let onPause = document.getElementById("btnPause");
   onPause.addEventListener("touchstart", (e) => {
@@ -143,6 +173,9 @@ function clickOnPause(){
   });
 }
 
+/**
+ * Event listener for the controls button during pause.
+ */
 function clickOnControls(){
   let onPause = document.getElementById("btnInfo");
   onPause.addEventListener("click", (e) => {
@@ -152,7 +185,9 @@ function clickOnControls(){
   });
 }
 
-
+/**
+ * Event listener for resuming the game from pause.
+ */
 function resummeGame(){
   let resumme = document.getElementById("btnResume");
   resumme.addEventListener("click", (e) => {
@@ -161,6 +196,9 @@ function resummeGame(){
   });
 }
 
+/**
+ * Event listener for resuming the game from pause (second button).
+ */
 function resummeGame2(){
   let resumme = document.getElementById("btnResume2");
   resumme.addEventListener("click", (e) => {
@@ -169,6 +207,9 @@ function resummeGame2(){
   });
 }
 
+/**
+ * Sets up mobile controls for the game.
+ */
 function controlsMobile(){
   document.getElementById("btnLeft").addEventListener("touchstart", (e) => {
     e.preventDefault();
@@ -207,6 +248,9 @@ function controlsMobile(){
   });
 }
 
+/**
+ * Event listener for the fullscreen button. Toggles fullscreen mode for the canvas.
+ */
 function fullscreen(){
   let btnFullScreen = document.getElementById("btnFullscreen");
     btnFullScreen.addEventListener("click", (e) => {
@@ -219,6 +263,10 @@ function fullscreen(){
     });
 }
 
+/**
+ * Enters fullscreen mode for the specified element.
+ * @param {HTMLElement} element - The element to display in fullscreen.
+ */
 function enterFullscreen(element) {
   if(element.requestFullscreen) {
     element.requestFullscreen();
@@ -229,6 +277,9 @@ function enterFullscreen(element) {
   }
 }
 
+/**
+ * Exits fullscreen mode.
+ */
 function exitFullscreen() {
   if(document.exitFullscreen) {
     document.exitFullscreen();

@@ -1,1 +1,0 @@
- daca apas right si d in acelasi timp, se misca in dreapta
