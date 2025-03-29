@@ -5,7 +5,7 @@ class ThrowableObject extends MovableObject {
         right:10,
         left:10,
       }
-      distance = 0;
+    distance = 0;
     IMAGES_BOTTLE_ROTATION = [
         "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
         "img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",

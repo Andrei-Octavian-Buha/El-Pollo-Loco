@@ -51,7 +51,7 @@ class Level {
             this.enemies.push(new Chicken(this.y, this.characterX, this.world));
           }
         }
-        if(this.world.character.x >= 5000){
+        if(this.world.character.x >= 5500){
           this.endgame = true;
         }
     }, 1500);
@@ -61,7 +61,7 @@ class Level {
     clearInterval(this.spawnEnemies);
     clearInterval(this.endGameBossInterval);
     this.spawnEnemies = null;
-    this.endbosss.push(new Endboss(this.characterX + 300, this.world)); 
+    this.endbosss.push(new Endboss(this.characterX + 750, this.world)); 
     if(this.world){
       this.world.testLevelToWorld();
     }

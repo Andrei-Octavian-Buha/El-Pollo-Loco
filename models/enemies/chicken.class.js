@@ -34,14 +34,13 @@ class Chicken extends MovableObject {
     setInterval(() => {
       if(!this.isDead()){
         if(this.isGameOnPause()){
-          console.log("CHICKEN - This game is on PAUSE :",this.world.gamePaused);
           return;
         }
         else{
           this.moveToLeft();
         }
       }
-    }, 1000 / 25);
+    }, 1000 /30);
     setInterval(() => {
       if(this.isDead()){
         this.playAnimation(this.IMAGES_DEAD);

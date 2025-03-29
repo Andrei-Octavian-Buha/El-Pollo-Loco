@@ -1,5 +1,5 @@
 class BottleLootBar extends DrawableObject{
-    percentage = 0;
+    percentage = 1;
 
     IMAGES_BOTTLE =[
         "img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png",
@@ -26,7 +26,7 @@ class BottleLootBar extends DrawableObject{
     }
 
     resolvImageIndex(){
-        if(this.percentage >= 80 && this.percentage <= 100){
+        if(this.percentage >= 80){
             return 5;
         }else if(this.percentage >= 60 && this.percentage <= 80){
             return 4;

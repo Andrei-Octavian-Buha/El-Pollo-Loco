@@ -34,7 +34,9 @@ window.addEventListener("keydown", (event) => {
   }
   if (event.key == "Escape") {
     keyboard.ESC = true;
-    world.putGameOnPause();
+    if (world.gamePaused == false) {
+      world.putGameOnPause();
+    }
   }
 });
 
@@ -69,27 +71,39 @@ window.addEventListener("keyup", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  let btnSound = document.getElementById("btnSound");
   controlsMobile();
   clickOnPause();
   resummeGame();
   resummeGame2();
   clickOnControls();
   exitGame();
+  sound();
+  fullscreen();
+});
 
+  function sound(){
+    soundOn();
+    soundOff();
+  }
+
+  function soundOn(){
+    let btnSound = document.getElementById("btnSound");
     btnSound.addEventListener("touchend", (e) => {
-    e.preventDefault();
-    let img = document.getElementById("btnSound");
-    if(world.sounds.volume == 1){
-      world.sounds.volume = 0;
-      img.src = "./img/gui/btn/sound_off.png";
-    }
-    else{
-      world.sounds.volume = 1;
-      img.src = "./img/gui/btn/sound.png";
-    }
-  });
+      e.preventDefault();
+      let img = document.getElementById("btnSound");
+      if(world.sounds.volume == 1){
+        world.sounds.volume = 0;
+        img.src = "./img/gui/btn/sound_off.png";
+      }
+      else{
+        world.sounds.volume = 1;
+        img.src = "./img/gui/btn/sound.png";
+      }
+    });
+  }
 
+  function soundOff(){
+    let btnSound = document.getElementById("btnSound");
     btnSound.addEventListener("click", (e) => {
       e.preventDefault();
       let img = document.getElementById("btnSound");
@@ -102,16 +116,13 @@ document.addEventListener("DOMContentLoaded", () => {
         img.src = "./img/gui/btn/sound.png";
       }
     });
-  });
-
+  }
 
 function exitGame(){
   let exit = document.getElementById("btnExit");
   exit.addEventListener("click", (e) => {
     e.preventDefault();
     world.ui.currentUI = 'exit';
-    world.restartGame();
-    world.draw();
   });
 }
 
@@ -139,8 +150,8 @@ function clickOnControls(){
     world.gamePaused = true;
     document.getElementById("controlsOnPauseMenu").style.display = "flex";
   });
-
 }
+
 
 function resummeGame(){
   let resumme = document.getElementById("btnResume");
@@ -149,6 +160,7 @@ function resummeGame(){
     world.putGameOnPause();
   });
 }
+
 function resummeGame2(){
   let resumme = document.getElementById("btnResume2");
   resumme.addEventListener("click", (e) => {
@@ -195,10 +207,33 @@ function controlsMobile(){
   });
 }
 
-function toggleFullScreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else if (document.exitFullscreen) {
-    document.exitFullscreen();
+function fullscreen(){
+  let btnFullScreen = document.getElementById("btnFullscreen");
+    btnFullScreen.addEventListener("click", (e) => {
+      e.preventDefault();
+      let fullscreenid = document.getElementById("fullscreen");
+      let canvasfullscreen = document.getElementById("canvas");
+      enterFullscreen(fullscreenid);
+      canvasfullscreen.style.width = "100%";
+      canvasfullscreen.style.height = "100%";
+    });
+}
+
+function enterFullscreen(element) {
+  if(element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+    element.msRequestFullscreen();
+  } else if(element.webkitRequestFullscreen) {  // iOS Safari
+    element.webkitRequestFullscreen();
   }
 }
+
+function exitFullscreen() {
+  if(document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if(document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}
+

@@ -4,6 +4,8 @@ const  level1  = new Level(
     [
       new Wolken("img/5_background/layers/4_clouds/1.png",0),
       new Wolken("img/5_background/layers/4_clouds/2.png",0),
+      new Wolken("img/5_background/layers/4_clouds/1.png",1023),
+      new Wolken("img/5_background/layers/4_clouds/2.png",1023),
       new Wolken("img/5_background/layers/4_clouds/1.png",1023 *2),
       new Wolken("img/5_background/layers/4_clouds/2.png",1023 *2),
       new Wolken("img/5_background/layers/4_clouds/1.png",1023 *3),

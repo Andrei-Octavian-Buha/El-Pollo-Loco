@@ -8,7 +8,7 @@ class Character extends MovableObject {
 
   speed = 10;
   health = 100;
-  botleLoot = 150;
+  botleLoot = 1;
   coinsLoot = 0;
   currentImage = 0;
 
