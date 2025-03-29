@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: movable-object.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: movable-object.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * Represents an object that can move within the game world. 
+ * This class provides methods to apply gravity, check collisions, and handle movement and jumping.
+ * It also includes functionality for detecting if the object is hurt and playing animations.
+ * 
+ * @extends DrawableObject
+ */class MovableObject extends DrawableObject {
+      /**
+     * The speed at which the object moves horizontally.
+     * @type {number}
+     */
+
+  speed = 0.15;
+      /**
+     * A flag indicating whether the object is moving in the opposite direction.
+     * @type {boolean}
+     */
+
+  otherDirection = false;
+      /**
+     * The vertical speed of the object (used for gravity and jumping).
+     * @type {number}
+     */
+  speedY = 0;
+
+      /**
+     * The acceleration applied to the object's speed due to gravity.
+     * @type {number}
+     */
+  acceleration = 2.5;
+
+      /**
+     * The health of the object.
+     * @type {number}
+     */
+  health = 100;
+
+      /**
+     * The timestamp of the last hit taken by the object.
+     * @type {number}
+     */
+  lastHit = 0;
+
+      /**
+     * An object representing the offset values (top, bottom, left, right) for collision detection.
+     * @type {Object}
+     * @property {number} top - The offset from the top.
+     * @property {number} bottom - The offset from the bottom.
+     * @property {number} right - The offset from the right.
+     * @property {number} left - The offset from the left.
+     */
+  offset = {
+    top:0,
+    bottom:0,
+    right:0,
+    left:0
+  }
+
+      /**
+     * The game world the object is part of.
+     * @type {Object}
+     */
+  world;
+
+      /**
+     * Creates an instance of the `MovableObject` class.
+     * 
+     * @param {Object} world - The world where the object exists.
+     */
+  constructor(world) {
+    super();
+    this.world = world;
+  }
+
+    /**
+     * Applies gravity to the object, causing it to fall if it is not above the ground.
+     * The object's `speedY` is used to determine the fall speed, and the object's position (`y`) is updated accordingly.
+     */
+  applyGravity() { 
+      setInterval(() => {
+        if (this.isAboveGround() || this.speedY > 0) {
+          this.y -= this.speedY;
+          this.speedY -= this.acceleration;
+        }
+      }, 1000 / 30);
+  }
+
+    /**
+     * Checks if the object is above the ground. 
+     * If the object is an instance of `ThrowableObject`, it will always return `true`. 
+     * Otherwise, it checks if the object's `y` position is below a certain threshold.
+     * 
+     * @returns {boolean} - `true` if the object is above the ground, otherwise `false`.
+     */
+  isAboveGround(){
+    if(this instanceof ThrowableObject){
+      return true;
+    }else{
+      return this.y &lt;  224;
+    }
+  }
+
+
+      /**
+     * Checks if the object is colliding with another movable object.
+     * 
+     * @param {MovableObject} mo - The other object to check for a collision.
+     * @returns {boolean} - `true` if the objects are colliding, otherwise `false`.
+     */
+  isColliding(mo){
+    return  this.x + this.width - this.offset.right > mo.x + mo.offset.left &amp;&amp;
+            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &amp;&amp;
+            this.x + this.offset.left &lt;  mo.x + mo.width - mo.offset.right &amp;&amp;
+            this.y + this.offset.top &lt; mo.y + mo.height - mo.offset.bottom;
+  }
+
+    /**
+     * Checks if the object is colliding with another movable object from bottom to top.
+     * 
+     * @param {MovableObject} mo - The other object to check for a bottom-to-top collision.
+     * @returns {boolean} - `true` if the objects are colliding from bottom to top, otherwise `false`.
+     */
+  isCollidingFromBottomtoTop(mo){
+    return this.y + this.height - this.offset.bottom > mo.y + mo.offset.top&amp;&amp;
+            this.x + this.width - this.offset.right > mo.x;
+  }
+
+    /**
+     * Moves the object to the right by a certain speed.
+     */
+  moveRight() {
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      this.x += this.speed;
+    }
+  }
+
+    /**
+     * Moves the object to the left by a certain speed.
+     */
+  moveToLeft() {
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      this.x -= this.speed;
+    }
+  }
+
+    /**
+     * Makes the object jump by applying an initial speed in the vertical direction (`speedY`).
+     */
+  jump(){
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      this.speedY = 25;
+    }
+  }
+
+    /**
+     * Plays an animation by cycling through a list of image paths.
+     * 
+     * @param {string[]} images - An array of image paths to be used for the animation.
+     */
+  playAnimation(images) {
+    let i = this.currentImage % images.length;
+    //i = 0, 1, 2, 3, 4, 5, 6, 0, 1,
+    let path = images[i];
+    this.img = this.imageCache[path];
+    this.currentImage++;
+  }
+
+      /**
+     * Checks if the object is hurt, based on the time since the last hit.
+     * 
+     * @returns {boolean} - `true` if the object was recently hurt (within 0.1 seconds), otherwise `false`.
+     */
+  isHurt(){
+    let timepassed = new Date().getTime() - this.lastHit;
+    timepassed = timepassed / 1000;
+    return timepassed &lt; 0.1;
+  }
+
+    /**
+     * Causes the object to take damage by updating its health and setting the last hit time.
+     */
+  hit(){    
+    if(this.isGameOnPause()){
+      return;
+    }else{
+      if(this.health &lt; 0){
+        this.health = 0;
+      }else{
+        this.lastHit = new Date().getTime();
+      }
+    }
+  }
+
+    /**
+     * Checks if the game is paused by looking at the `gamePaused` flag in the world object.
+     * 
+     * @returns {boolean} - `true` if the game is paused, otherwise `false`.
+     */
+  isGameOnPause(){
+    if(this.world){
+      return this.world.gamePaused;
+    }
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="BotleLoot.html">BotleLoot</a></li><li><a href="BottleLootBar.html">BottleLootBar</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Coins.html">Coins</a></li><li><a href="CoinsLoot.html">CoinsLoot</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="EnemyBar.html">EnemyBar</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="Sounds.html">Sounds</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="UI.html">UI</a></li><li><a href="Wolken.html">Wolken</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 29 2025 23:38:50 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

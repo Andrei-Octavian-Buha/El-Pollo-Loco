@@ -4,9 +4,11 @@
  * @extends MovableObject
  */
 class Wolken extends MovableObject {
-    /** @type {number} Vertical position of the cloud (always 0). */
+  /** 
+   * Vertical position of the cloud (always 0). */
   y = 0;
-    /** @type {number} Height of the cloud. */
+  /** 
+   * Height of the cloud. */
   height = 150;
 
     /**

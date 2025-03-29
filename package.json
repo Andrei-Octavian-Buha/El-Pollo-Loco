@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "jsdoc": "^4.0.4"
+  },
+  "dependencies": {
+    "jsdoc-template": "^1.2.0"
   }
 }
