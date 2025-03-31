@@ -101,6 +101,14 @@
     }
   }
 
+  isAboveTheEnemy(mo){
+      if(this instanceof ThrowableObject){
+        return true;
+      }else{
+        return this.y + this.height - this.offset.bottom > mo.y + mo.height - mo.offset.top;
+      }
+  }
+
 
       /**
      * Checks if the object is colliding with another movable object.
@@ -113,22 +121,16 @@
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
             this.x + this.offset.left <  mo.x + mo.width - mo.offset.right &&
             this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
-  }
+  }                        
 
-    /**
-     * Checks if the object is colliding with another movable object from bottom to top.
-     * 
-     * @param {MovableObject} mo - The other object to check for a bottom-to-top collision.
-     * @returns {boolean} - `true` if the objects are colliding from bottom to top, otherwise `false`.
-     */
-  isCollidingFromBottomtoTop(mo){
-    return this.y + this.height - this.offset.bottom > mo.y + mo.offset.top&&
-            this.x + this.width - this.offset.right > mo.x;
-  }
-
-    /**
-     * Moves the object to the right by a certain speed.
-     */
+  jumpkill(mo){
+    console.log("MOB Y", mo.y);
+    console.log("PLayer Y", (this.y));
+    return (this.y + this.offset.bottom > mo.y + mo.height);
+  }  
+  /**
+   * Moves the object to the right by a certain speed.
+   */
   moveRight() {
     if(this.isGameOnPause()){
       return;

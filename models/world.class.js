@@ -119,7 +119,7 @@ checkBottleCollision() {
     this.level.enemies.forEach((enemy) => {
       if (bottle.isColliding(enemy)) {
         this.sounds.playChickenDamage();
-            enemy.health -= 50;
+            enemy.health -= 100;
             this.botles.splice(bottleIndex, 1);
           }
         });
@@ -136,7 +136,7 @@ checkBottleEndboossCollision() {
         this.sounds.playChickenDamage();
         if(enemy.health > 0){
           enemy.hit();
-          enemy.health -= 5;
+          enemy.health -= 10;
           this.statusBar[3].setPertange(enemy.health);
           this.botles.splice(bottleIndex, 1);
         }
@@ -156,7 +156,7 @@ checkBottleEndboossCollision() {
 checkCollisions(){
   this.level.enemies.forEach((enemy)=>{
     if(this.character.isColliding(enemy)){
-      if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy)){
+      if(this.character.jumpkill(enemy)){
         if(enemy.health > 0){
           this.sounds.playChickenDamage();
         }
@@ -165,7 +165,7 @@ checkCollisions(){
         if (!this.cooldown) {  // Only trigger if the cooldown is not active
           if(this.character.health > 0){
             this.character.hit(); 
-            this.character.health -= 1;
+            this.character.health -= 20;
             this.statusBar[0].setPertange(this.character.health);
             this.sounds.playTakeDamage();
             this.checkInterval(450);  // Start cooldown after the sound is played
