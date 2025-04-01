@@ -54,7 +54,7 @@ IMAGES_HEATH = [
    * @returns {number} - The index of the image in the `IMAGES_HEATH` array.
    */
     resolvII(){
-        if(this.percentage >= 80 && this.percentage <= 100){
+        if(this.percentage > 80 ){
             return 5;
         }else if(this.percentage >= 60 && this.percentage <= 80){
             return 4;

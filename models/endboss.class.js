@@ -157,26 +157,7 @@ class Endboss extends MovableObject {
     this.world = world;
     this.playIntroAnimation();
     this.walk(); 
-    this.changesize();
     this.checkEndBossHealth();
-  }
-
-    /**
-   * Changes the size of the end boss periodically and updates its collision status.
-   */
-  changesize(){
-    setInterval(() => {
-      this.width = 40;
-      this.height= 70;
-      this.y = 420;
-      this.world.collisionWithEndBoss = true;
-      setTimeout(() => {
-        this.width = 128;
-        this.height = 256;
-        this.y = 240;
-        this.world.collisionWithEndBoss = false;
-      },2000 );
-    }, 5000);
   }
 
   /**

@@ -153,31 +153,40 @@ checkBottleEndboossCollision() {
 /**
  * Checks collisions between the character and enemies.
  */
-checkCollisions(){
-  this.level.enemies.forEach((enemy)=>{
-    if(this.character.isColliding(enemy)){
-      if(this.character.jumpkill(enemy)){
-        if(enemy.health > 0){
-          this.sounds.playChickenDamage();
-        }
-        enemy.health = 0;
-      }else if(enemy.health > 0){              
-        if (!this.cooldown) {  // Only trigger if the cooldown is not active
-          if(this.character.health > 0){
-            this.character.hit(); 
-            this.character.health -= 20;
-            this.statusBar[0].setPertange(this.character.health);
-            this.sounds.playTakeDamage();
-            this.checkInterval(450);  // Start cooldown after the sound is played
-          }else {
-            this.gameOver = true;
-            this.youLose = true;
-          }
+
+
+checkCollisions() {
+  let chY = this.character.y + this.character.height - this.character.offset.bottom;
+  this.level.enemies.forEach((enemy) => {
+    if (this.character.isColliding(enemy)){
+      console.log("chY:", chY, "enemy top:", enemy.y + enemy.height - enemy.offset.top, "speedY:", this.character.speedY);
+      if(chY < enemy.y + enemy.height - enemy.offset.top && this.character.speedY == -25){
+            enemy.health -= 100;
       }
+      if (enemy.health > 0 && !this.cooldown && this.character.speedY <= -2.5) {
+        if(this.character.health > 0 ){ 
+          this.character.hit(); 
+          this.character.health -= 20;
+          this.statusBar[0].setPertange(this.character.health);  // Update health bar
+          this.sounds.playTakeDamage();  // Play damage sound effect
+          this.checkInterval(450);  // Start cooldown after the sound is played
+        } else {
+          this.gameOver = true;
+          this.youLose = true;
+        }
       }
     }
   });
 }
+
+
+// if(this.character.y + this.character.height - this.character.offset.bottom < enemy.y + enemy.height - enemy.offset.top){
+//   if (enemy.health > 0 && this.character.isColliding(enemy)) {
+//     this.sounds.playChickenDamage();
+//     enemy.health -= 100;
+//   }
+// }
+
 
 /**
  * Checks collisions between the character and the end boss.
@@ -220,17 +229,18 @@ draw() {
       this.ui.drawUI();
     }else{
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.translate(this.camera_x, 0);
-      this.addArrayObjectToGame();
-      this.addToMap(this.character);
-      this.ctx.translate(-this.camera_x, 0);
-      this.addObjectsToMap(this.statusBar);
       this.checkBottleCollision();
       this.checkBottleEndboossCollision();
       this.checkCollisions(); 
       this.checkEndbossCollisons();
       this.checkCoinsLoot();
       this.checkBotleLoot();
+      this.ctx.translate(this.camera_x, 0);
+      this.addArrayObjectToGame();
+      this.addToMap(this.character);
+      this.ctx.translate(-this.camera_x, 0);
+      this.addObjectsToMap(this.statusBar);
+
     }
     //draw wird immer wieder aufgerufen
     let self = this;

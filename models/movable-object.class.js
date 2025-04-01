@@ -122,12 +122,10 @@
             this.x + this.offset.left <  mo.x + mo.width - mo.offset.right &&
             this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
   }                        
-
-  jumpkill(mo){
-    console.log("MOB Y", mo.y);
-    console.log("PLayer Y", (this.y));
-    return (this.y + this.offset.bottom > mo.y + mo.height);
-  }  
+  
+  isCollidinigFrom(mo){
+    
+  }
   /**
    * Moves the object to the right by a certain speed.
    */
