@@ -124,7 +124,6 @@ class Level {
   addEnemiesToGame() {
       this.endGameBossInterval = setInterval(() => {
       if(this.endgame == true) {
-        this.enemies =[];
         this.addEndBossToGame();
       } else {
         this.addRandomEnemies();
@@ -139,27 +138,26 @@ class Level {
   addRandomEnemies(){
     if(this.spawnEnemies) return;
      this.spawnEnemies = setInterval(() => {
-        this.y = 430; // this.y  = 430 +  Math.random() * 30 - 20;
         this.characterX = this.world.character.x;
         if(this.isGameOnPause()){
           return;
         }else if(this.world && this.world.character.health > 0){
+          let randomEnemyType = Math.random() < 0.3 ? Chicken : BabyChicken;
+          let mobs = new randomEnemyType(this.characterX, this.world);
           if(this.world.character.x > 350){
-            console.log(this.y);
-            
-            this.enemies.push(new Chicken(this.y, this.characterX, this.world));
+            this.enemies.push(mobs);
           }
         }
         if(this.world.character.x >= 5500){
           this.endgame = true;
         }
-    }, 1500);
+    }, 1000);
   }
 
-      /**
-     * Adds the end boss to the game and stops enemy spawning.
-     * Clears the current intervals for spawning enemies and the end boss.
-     */
+  /**
+  * Adds the end boss to the game and stops enemy spawning.
+  * Clears the current intervals for spawning enemies and the end boss.
+  */
   addEndBossToGame(){
     clearInterval(this.spawnEnemies);
     clearInterval(this.endGameBossInterval);

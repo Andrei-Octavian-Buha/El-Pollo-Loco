@@ -123,8 +123,8 @@
             this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
   }                        
   
-  isCollidinigFrom(mo){
-    
+  isCollidinigFromTop(mo){
+    return this.y + this.height - this.offset.bottom < mo.y + mo.height - mo.offset.top;
   }
   /**
    * Moves the object to the right by a certain speed.
@@ -171,6 +171,8 @@
     this.img = this.imageCache[path];
     this.currentImage++;
   }
+
+
 
       /**
      * Checks if the object is hurt, based on the time since the last hit.

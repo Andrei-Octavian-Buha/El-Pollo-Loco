@@ -139,8 +139,7 @@ checkBottleEndboossCollision() {
           enemy.health -= 10;
           this.statusBar[3].setPertange(enemy.health);
           this.botles.splice(bottleIndex, 1);
-        }
-        if (enemy.health <= 0) {
+        }else{
           if(this.level.endgame == true){
             this.gameOver = true;
           }
@@ -153,39 +152,35 @@ checkBottleEndboossCollision() {
 /**
  * Checks collisions between the character and enemies.
  */
-
-
+hitEnemies = {}; 
 checkCollisions() {
-  let chY = this.character.y + this.character.height - this.character.offset.bottom;
-  this.level.enemies.forEach((enemy) => {
+  this.level.enemies.forEach((enemy, enemyIndex) => {
     if (this.character.isColliding(enemy)){
-      console.log("chY:", chY, "enemy top:", enemy.y + enemy.height - enemy.offset.top, "speedY:", this.character.speedY);
-      if(chY < enemy.y + enemy.height - enemy.offset.top && this.character.speedY == -25){
-            enemy.health -= 100;
+      
+      if((this.character.isCollidinigFromTop(enemy) && this.character.speedY == -22.5) ||
+          (this.character.isCollidinigFromTop(enemy) && this.character.speedY == -25)){
+        enemy.health -= 100;
       }
-      if (enemy.health > 0 && !this.cooldown && this.character.speedY <= -2.5) {
+      if (enemy.health > 0 && !this.hitEnemies[enemyIndex]) {
         if(this.character.health > 0 ){ 
-          this.character.hit(); 
+          this.hitEnemies[enemyIndex] = true;
+          this.character.hit();
           this.character.health -= 20;
-          this.statusBar[0].setPertange(this.character.health);  // Update health bar
-          this.sounds.playTakeDamage();  // Play damage sound effect
-          this.checkInterval(450);  // Start cooldown after the sound is played
+          this.statusBar[0].setPertange(this.character.health);
+          this.sounds.playTakeDamage();
+          this.checkInterval(450);
+          setTimeout(() => {
+            this.hitEnemies[enemyIndex] = false;
+          }, 2000);
         } else {
           this.gameOver = true;
           this.youLose = true;
         }
       }
     }
+
   });
 }
-
-
-// if(this.character.y + this.character.height - this.character.offset.bottom < enemy.y + enemy.height - enemy.offset.top){
-//   if (enemy.health > 0 && this.character.isColliding(enemy)) {
-//     this.sounds.playChickenDamage();
-//     enemy.health -= 100;
-//   }
-// }
 
 
 /**

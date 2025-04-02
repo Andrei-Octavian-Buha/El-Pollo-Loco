@@ -155,8 +155,8 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.x = x;
     this.world = world;
-    this.playIntroAnimation();
     this.walk(); 
+    this.playIntroAnimation();
     this.checkEndBossHealth();
   }
 
@@ -194,7 +194,7 @@ class Endboss extends MovableObject {
         this.playAnimation(this.IMAGES_ALERT);
         i++;
       }
-    }, 84);
+    }, 334);
   }
 
   /**
@@ -226,7 +226,6 @@ class Endboss extends MovableObject {
         clearInterval(intv);
         this.playAnimation(this.IMAGES_DEAD);
         this.world.endgame = false;
-        this.world.enemies = [];
       }
     }, 1000/30);
   }
@@ -237,22 +236,26 @@ class Endboss extends MovableObject {
    */
   endbossAtackMovemet(){ 
       if (this.health == 90 && this.moves[9] == false) {
-        this.jumptocharacter();
-
-        // this.isHealth90();
         this.spawnEnemies();
+        this.moves[9] = true;
       }else if (this.health == 80 && this.moves[8] == false) {
         this.spawnEnemies();
+        this.moves[8] = true;
       }else if (this.health == 70 && this.moves[7] == false) {
-        this.isHealth70();
+        this.spawnEnemies();
+        this.moves[7] = true;
       }else if (this.health == 60 && this.moves[6] == false) {
         this.spawnEnemies();
+        this.moves[6] = true;
       }else if (this.health == 50 && this.moves[5] == false) {
         this.spawnEnemies();
+        this.moves[5] = true;
       }else if (this.health == 40 && this.moves[4] == false) {
         this.spawnEnemies();
+        this.moves[4] = true;
       }else if (this.health == 30 && this.moves[3] == false) {
         this.spawnEnemies();
+        this.moves[3] = true;
       }else if (this.health == 20 && this.moves[2] == false) {
         this.health = 30;
         this.moves[2] = true;
@@ -261,61 +264,19 @@ class Endboss extends MovableObject {
       }
     }
 
-      /**
-   * Makes the end boss jump towards the player.
-   */
-    jumptocharacter(){
-      this.y = 200;
-      setTimeout(() => {
-        this.y = 240;
-      }, 1000);
-    }
 
-
-  // isHealth90(){
-  //   this.speed = 10;
-  //   let hpAttack = setInterval(() => {
-  //     if(this.x < (this.world.character.x + this.world.character.width - this.world.character.offset.right)){
-  //       this.isAttacking == true;
-  //       this.moves[9] == true;
-  //       this.x += 100;
-  //       setTimeout(() => {
-  //         this.speed = 0.5;
-  //       }, 3000);
-  //       this.speed = 5;
-  //       clearInterval(hpAttack);
-  //       }
-  //   }, 1000/30);
-  // }
 
     /**
    * Spawns a random number of chickens at a random x position as additional enemies.
    */
   spawnEnemies(){
-    let iEnemies = Math.floor(Math.random() * 10) +1;
+    let iEnemies = Math.floor(Math.random() * 5) +1;
     let xEnemies = Math.floor(Math.random() * 101) + 600;
-    this.x += xEnemies;
+    let xForNewEnemies = this.x + xEnemies;
     for (let i = 0; i <= iEnemies;  i++) {
-      this.world.level.enemies.push(new Chicken(430, this.x, this.world));
-      console.log(`Endboss spawn ${iEnemies} chickens`);
+      this.world.level.enemies.push(new Chicken(xForNewEnemies, this.world));
     }
   }
-
-  // isHealth70(){
-  //     this.speed = 10;
-  //     let hpAttack = setInterval(() => {
-  //     if(this.isColliding()){
-  //       this.isAttacking == true;
-  //       this.moves[7] == true;
-  //       this.x += 300;
-  //       setTimeout(() => {
-  //         this.speed = 0.5;
-  //       }, 2000);
-  //       this.speed = 5;
-  //       clearInterval(hpAttack);
-  //     }
-  //   }, 1000/30);
-  // }
 
     /**
    * Checks if the end boss is colliding with the player character.

@@ -70,6 +70,8 @@ class Character extends MovableObject {
    */
   currentImage = 0;
 
+  isIdle = false;
+
   /**
    * The offset values for the character's collision area.
    * @type {Object}
@@ -80,6 +82,8 @@ class Character extends MovableObject {
     right: 65,
     left:45,
   }
+
+  lastMovementTime;
 
     /**
    * Array of image paths representing the character's idle animation.
@@ -98,6 +102,24 @@ class Character extends MovableObject {
     "img/2_character_pepe/1_idle/idle/I-10.png",
   ];
 
+  
+    /**
+   * Array of image paths representing the character's idle animation.
+   * @type {string[]}
+   */
+    IMAGES_LONG_IDLE = [
+      "img/2_character_pepe/1_idle/long_idle/I-11.png",
+      "img/2_character_pepe/1_idle/long_idle/I-12.png",
+      "img/2_character_pepe/1_idle/long_idle/I-13.png",
+      "img/2_character_pepe/1_idle/long_idle/I-14.png",
+      "img/2_character_pepe/1_idle/long_idle/I-15.png",
+      "img/2_character_pepe/1_idle/long_idle/I-16.png",
+      "img/2_character_pepe/1_idle/long_idle/I-17.png",
+      "img/2_character_pepe/1_idle/long_idle/I-18.png",
+      "img/2_character_pepe/1_idle/long_idle/I-19.png",
+      "img/2_character_pepe/1_idle/long_idle/I-20.png",
+    ];
+
     /**
    * Array of image paths representing the character's walking animation.
    * @type {string[]}
@@ -109,24 +131,6 @@ class Character extends MovableObject {
     "img/2_character_pepe/2_walk/W-24.png",
     "img/2_character_pepe/2_walk/W-25.png",
     "img/2_character_pepe/2_walk/W-26.png",
-  ];
-
-    /**
-   * Array of image paths representing the character's jumping animation.
-   * @type {string[]}
-   */
-  IMAGES_IDLE = [
-    "img/2_character_pepe/1_idle/idle/I-1.png",
-    "img/2_character_pepe/1_idle/idle/I-2.png",
-    "img/2_character_pepe/1_idle/idle/I-3.png",
-    "img/2_character_pepe/1_idle/idle/I-4.png",
-    "img/2_character_pepe/1_idle/idle/I-5.png",
-    "img/2_character_pepe/1_idle/idle/I-6.png",
-    "img/2_character_pepe/1_idle/idle/I-7.png",
-    "img/2_character_pepe/1_idle/idle/I-8.png",
-    "img/2_character_pepe/1_idle/idle/I-9.png",
-    "img/2_character_pepe/1_idle/idle/I-10.png",
-
   ];
 
     /**
@@ -152,7 +156,7 @@ class Character extends MovableObject {
   IMAGES_HURT = [
     "img/2_character_pepe/4_hurt/H-41.png",
     "img/2_character_pepe/4_hurt/H-42.png",
-    "img/2_character_pepe/4_hurt/H-43.png"
+    "img/2_character_pepe/4_hurt/H-43.png",
   ];
 
     /**
@@ -180,99 +184,97 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_IDLE);
-    this.animate();
+    this.loadImages(this.IMAGES_LONG_IDLE);
+    this.controls();
     this.applyGravity();
+    this.characterAnimation();
   }
 
     /**
    * Handles the character's animations, movement, and interactions with the game world.
    * The character can walk, jump, throw bottles, and respond to keyboard input.
    */
-  animate() {
+  controls() {
     setInterval(() => {
       this.world.camera_x = -this.x + 200;
-      if(!this.isDead()){
-        if(this.isGameOnPause()){
-          return;
-        }else{
-        if ((
-              (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && 
-              this.world.keyboard.SPACE && !this.isAboveGround()) || 
-              this.world.keyboard.SPACE && !this.isAboveGround()) {
-                  this.jump();
-                  if (!this.world.cooldown) {
-                    this.world.sounds.playJump();
-                    this.world.checkInterval(350);
-                  }
-        }
-        else if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x)
-        {
-          this.moveRight();
-          this.otherDirection = false;
-          if (!this.world.cooldown) {
-            this.world.sounds.playWalk();
-            this.world.checkInterval(350);
-          }
-        }
-        else if (this.world.keyboard.LEFT && this.x > 150) {
-          this.moveToLeft();
-          this.otherDirection = true;
-          if (!this.world.cooldown) {
-            this.world.sounds.playWalk();
-            this.world.checkInterval(350);
-          }
-        }else if(this.botleLoot > 0 && !this.world.cooldown){
-          if(this.world.keyboard.D ){
-            this.world.checkInterval(300);
-            this.world.throwBottle(20);
-            this.botleLoot -=  1;
-            console.log(`Mai ai ${this.botleLoot}`);
-            this.world.statusBar[1].setPertange(this.world.character.botleLoot);
-          }else if(this.world.keyboard.S ){
-            this.world.checkInterval(300);
-            this.world.throwBottle(15);
-            this.botleLoot -=  1;              
-            console.log(`Mai ai ${this.botleLoot}`);
-            this.world.statusBar[1].setPertange(this.world.character.botleLoot);
-          }else if(this.world.keyboard.A ){
-            this.world.checkInterval(300);
-            this.world.throwBottle(10);
-            this.botleLoot -=  1;
-            console.log(`Mai ai ${this.botleLoot}`);
-            this.world.statusBar[1].setPertange(this.world.character.botleLoot);
-          }
-        }
+      if (!this.isDead() && !this.isGameOnPause()) {
+        this.handleMovement();
+        this.handleThrowing();
       }
-    }
     }, 1000/30);
-    
-    setInterval(() => {
-      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_IDLE);
-      }
-    }, 333);
-    this.fastAnimation();
   }
 
 
-  /**
-   * Plays the walking, hurt, or dead animation based on the character's state.
-   */
-  fastAnimation(){
+  handleMovement() {
+    if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+      this.jump();
+      this.world.sounds.playJump();
+      this.lastMovementTime = Date.now();
+    } else if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {  
+      this.moveRight();
+      this.otherDirection = false;
+      this.playMovementSound();
+    } else if (this.world.keyboard.LEFT && this.x > 150) {
+      this.moveToLeft();
+      this.otherDirection = true;
+      this.playMovementSound();
+    }
+  }
+
+  handleThrowing() {
+    if (this.botleLoot > 0 && !this.world.cooldown) {
+      if (this.world.keyboard.D) {
+        this.world.checkInterval(300);
+        this.world.throwBottle(20);
+        this.botleLoot -=  1;
+        this.world.statusBar[1].setPertange(this.world.character.botleLoot);
+      } else if (this.world.keyboard.S) {
+        this.world.checkInterval(300);
+        this.world.throwBottle(15);
+        this.botleLoot -=  1;              
+        this.world.statusBar[1].setPertange(this.world.character.botleLoot);
+      } else if (this.world.keyboard.A) {
+        this.world.checkInterval(300);
+        this.world.throwBottle(10);
+        this.botleLoot -=  1;
+        this.world.statusBar[1].setPertange(this.world.character.botleLoot);
+      }
+    }
+  }
+
+  playMovementSound() {
+    if (!this.world.cooldown && !this.isAboveGround()) {
+      this.world.sounds.playWalk();
+      this.world.checkInterval(350);
+      this.lastMovementTime = Date.now();
+    }
+  }
+
+
+  characterAnimation() {
+    const animationSpeed = 100;  // Setează viteza animației în milisecunde
     setInterval(() => {
-      if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_WALKING);
-      }else if(this.isDead()){
+      if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
       }else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
-        this.world.sounds.playTakeDamage();
-      }
-    }, 150);
-    setInterval(() => {
-      if(this.isAboveGround()){
+      } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMP);
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
+      } else {
+        this.playIdleAnimation();
       }
-    }, 200);
+    }, animationSpeed); // Viteza este controlată de acest interval
   }
+
+playIdleAnimation() {
+  const idleTime = Date.now() - this.lastMovementTime;
+  if (idleTime > 5000) {
+    this.playAnimation(this.IMAGES_LONG_IDLE);
+  } else {
+    this.playAnimation(this.IMAGES_IDLE);
+  }
+}
+
 }

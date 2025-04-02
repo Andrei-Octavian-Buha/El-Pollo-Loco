@@ -19,7 +19,7 @@ class Chicken extends MovableObject {
    * The y-coordinate of the chicken.
    * @type {number}
    */
-  y;
+  y = 430;
 
     /**
    * The health of the chicken.
@@ -67,12 +67,11 @@ class Chicken extends MovableObject {
    * @param {number} x - The x-coordinate of the chicken.
    * @param {Object} world - The world object the chicken belongs to.
    */
-  constructor(y, x, world) {
+  constructor(x, world) {
     super();
     this.loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);  
-    this.y = y;
     this.world = world;
     this.x = x + 700 + Math.random() * 700;
     this.speed = 5 + Math.random() * 1.45;
@@ -99,7 +98,7 @@ class Chicken extends MovableObject {
       }else{
         this.playAnimation(this.IMAGES_WALKING);
       }
-    }, 1000/ 10  / this.speed);
+    }, 334);
   }
 }
 
