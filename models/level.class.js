@@ -122,9 +122,10 @@ class Level {
      * Enemies are added at a regular interval.
      */
   addEnemiesToGame() {
-      this.endGameBossInterval = setInterval(() => {
+      let endGameBossInterval = setInterval(() => {
       if(this.endgame == true) {
         this.addEndBossToGame();
+        clearInterval(endGameBossInterval);
       } else {
         this.addRandomEnemies();
       }
@@ -159,8 +160,6 @@ class Level {
   * Clears the current intervals for spawning enemies and the end boss.
   */
   addEndBossToGame(){
-    clearInterval(this.spawnEnemies);
-    clearInterval(this.endGameBossInterval);
     this.spawnEnemies = null;
     this.endbosss.push(new Endboss(this.characterX + 750, this.world)); 
     if(this.world){

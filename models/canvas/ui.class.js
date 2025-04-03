@@ -67,12 +67,12 @@ paths = {
       document.getElementById("guiId").style.display = "none";
       this.world.ctx.clearRect(0, 0, this.world.canvas.width, this.world.canvas.height);
       this.world.ctx.drawImage(this.images.win, 0, 0, 1024, 576);
-    } , 1000);
-    setTimeout(() => {
-      this.currentUI = 'exit';
-      this.drawUI();
-    }, 5000);
+      document.getElementById("gameOverID").classList.remove("dNone");
+      this.restartThisGame();
+    } , 3000);
   }
+
+
 
   /**
    * Handles the lose condition screen.
@@ -83,13 +83,36 @@ paths = {
       document.getElementById("guiId").style.display = "none";
       this.world.ctx.clearRect(0, 0, this.world.canvas.width, this.world.canvas.height);
       this.world.ctx.drawImage(this.images.lose, 0, 0, 1024, 576);
-    } , 1000);
-    setTimeout(() => {
-      this.currentUI = 'exit';
-      this.drawUI();
-    }, 5000);
+      document.getElementById("gameOverID").classList.remove("dNone");
+      this.restartThisGame();
+    } , 3000);
   }
 
+
+  restartThisGame(){
+    document.getElementById("restartGame").addEventListener("click", (e) => {
+      e.preventDefault();
+      setTimeout(() => {
+        this.currentUI = 'exit';
+        this.world.restartGame();
+        this.world.gamePaused = false;
+        document.getElementById("startGameLayoutId").style.display = "none";
+        document.getElementById("mobileControlsBarId").style.display = "flex";
+        document.getElementById("guiId").style.display = "flex";
+        document.getElementById("gameOverID").classList.add("dNone");
+      } , 1000);
+    });
+    document.getElementById("backToMenu").addEventListener("click", (e) => {
+      e.preventDefault();
+      this.currentUI = "exit";
+      this.world.restartGame();
+      document.getElementById("gameOnPauseMenu").style.display = "none";
+      document.getElementById("startGameLayoutId").style.display = "flex";
+      document.getElementById("guiId").style.display = "none";
+      document.getElementById("mobileControlsBarId").style.display = "none";
+      document.getElementById("gameOverID").classList.add("dNone");
+    });
+  }
   /**
    * Draws the appropriate UI based on the current state.
    * Handles interactions like starting the game, displaying controls, and handling exit.
@@ -100,10 +123,13 @@ paths = {
         document.getElementById("startGame").addEventListener("click", (e) => {
           e.preventDefault();
           this.world.gamePaused = false;
+          this.world.sounds.backgroundMusic.play();
           document.getElementById("startGameLayoutId").style.display = "none";
           document.getElementById("mobileControlsBarId").style.display = "flex";
           document.getElementById("guiId").style.display = "flex";
+          document.getElementById("impressumButtonId").style.display = "none";
         });
+
         document.getElementById("startGameControls").addEventListener("click", (e) => {
           e.preventDefault();
           document.getElementById("startGameLayoutId").style.display = "none";
@@ -131,6 +157,7 @@ paths = {
         document.getElementById("startGameLayoutId").style.display = "flex";
         document.getElementById("guiId").style.display = "none";
         document.getElementById("mobileControlsBarId").style.display = "none";
+        document.getElementById("impressumButtonId").style.display = "flex";
         break;
       default:
         break;

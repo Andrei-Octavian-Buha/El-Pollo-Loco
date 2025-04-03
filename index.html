@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>El Pollo Loco</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./styles/start-game.css">
     <link rel="stylesheet" href="./style.css" />
 
@@ -38,7 +39,7 @@
     <div id="fullscreen">
       <div  id="startGameLayoutId" class="startGame">
         <div  class="startGameLayout">
-          <img id="startGame" class="allBtnStyle" src="./img/gui/btn/play.png" alt="">
+          <img id="startGame" class="allBtnStyle StartGameButttonClassName" src="./img/gui/btn/play.png" alt="">
           <img id="startGameControls"  class="allBtnStyle desktop" src="./img/gui/btn/settings.png" alt="">
         </div>
       </div>
@@ -99,8 +100,16 @@
             </div>
           </div>
       </div>
+      <div id="gameOverID"  class="startGameLayout dNone StartGameButttonClassName">
+        <img id="restartGame" class="allBtnStyle" src="./img/gui/btn/restart.png" alt="">
+        <img id="backToMenu" class="allBtnStyle" src="./img/gui/btn/menu.png" alt="">
+      </div>
       <canvas id="canvas" width="1024" height="576"></canvas>
     </div>
-    <a href="./inpressum.html">Impressum</a>
+
+    <a id="impressumButtonId" href="./inpressum.html" class="desktop" style="text-align: center;">Impressum</a>
+    <div class="deviceTurn">
+      <img class="imgTurnDevice" src="./img/turndevice.png" alt="">
+    </div>
   </body>
 </html>

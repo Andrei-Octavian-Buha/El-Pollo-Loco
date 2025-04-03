@@ -92,7 +92,7 @@ checkCoinsLoot(){
       this.character.coinsLoot += 2;
       this.statusBar[2].setPertange(this.character.coinsLoot);
       this.level.coins.splice(coinIndex,1);
-      this.sounds.playCollectBottle(); 
+      this.sounds.playCollectCoins(); 
     }
   });
 }
@@ -142,6 +142,8 @@ checkBottleEndboossCollision() {
         }else{
           if(this.level.endgame == true){
             this.gameOver = true;
+            this.sounds.backgroundMusic.pause();
+            this.sounds.playGameWin();
           }
         }
         }
@@ -160,6 +162,7 @@ checkCollisions() {
       if((this.character.isCollidinigFromTop(enemy) && this.character.speedY == -22.5) ||
           (this.character.isCollidinigFromTop(enemy) && this.character.speedY == -25)){
         enemy.health -= 100;
+        this.sounds.playChickenDamage();
       }
       if (enemy.health > 0 && !this.hitEnemies[enemyIndex]) {
         if(this.character.health > 0 ){ 
@@ -175,6 +178,8 @@ checkCollisions() {
         } else {
           this.gameOver = true;
           this.youLose = true;
+          this.sounds.backgroundMusic.pause();
+          this.sounds.playGameOver();
         }
       }
     }
@@ -189,7 +194,7 @@ checkCollisions() {
 checkEndbossCollisons(){
   this.level.endbosss.forEach((enemy)=>{
     if(this.character.isColliding(enemy) ){
-      if(this.character.isAboveGround() && this.character.isCollidingFromBottomtoTop(enemy) && this.collisionWithEndBoss){
+      if(this.character.isAboveGround() && this.collisionWithEndBoss){
         enemy.health -= 10;
         this.statusBar[3].setPertange(enemy.health);
         this.collisionWithEndBoss = false; 
@@ -203,6 +208,8 @@ checkEndbossCollisons(){
         }else {
           this.gameOver = true;
           this.youLose = true;
+          this.sounds.backgroundMusic.pause();
+          this.sounds.playGameOver();
         }
       }
     }
@@ -217,7 +224,9 @@ draw() {
     if(this.youLose){
       this.ui.youLose();
     }else {
+
       this.ui.youWin();
+      
     }
   }else{
     if (this.gamePaused) {
@@ -346,6 +355,7 @@ checkInterval(x){
 restartGame() {
   if(this.character.health == 0 || this.ui.currentUI == 'exit'){
     this.ui.currentUI = 'start';
+    this.sounds.backgroundMusic.pause();
     this.gameOver = false;
     this.gamePaused = true;
     this.youLose = false;

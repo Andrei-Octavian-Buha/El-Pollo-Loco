@@ -8,7 +8,9 @@ let keyboard = new Keyboard();
  */
 function init() {
   canvas = document.getElementById("canvas");
+
   world = new World(canvas, keyboard);
+  loadVolume();
 }
 
 /**
@@ -85,6 +87,10 @@ window.addEventListener("keyup", (event) => {
 /**
  * Sets up event listeners for various UI elements when the document is ready.
  */
+
+window.onload = function() {
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   controlsMobile();
   clickOnPause();
@@ -104,6 +110,39 @@ document.addEventListener("DOMContentLoaded", () => {
     soundOff();
   }
 
+  // When the volume is updated, save it to localStorage
+function updateVolume(newVolume) {
+  world.sounds.volume = newVolume;
+  world.sounds.backgroundMusic.volume = newVolume;
+  localStorage.setItem('soundVolume', world.sounds.volume);
+  localStorage.setItem('backgroundMusicVolume', world.sounds.backgroundMusic.volume);
+}
+
+function loadVolume() {
+  // Ensure world.sounds exists to prevent errors
+  if (world && world.sounds) {
+    // Retrieve saved volume levels from localStorage
+    const savedSoundVolume = localStorage.getItem('soundVolume');
+    const savedBackgroundMusicVolume = localStorage.getItem('backgroundMusicVolume');
+
+    // Apply saved volume for sound if available, otherwise default to 1
+    if (savedSoundVolume !== null) {
+        world.sounds.volume = parseFloat(savedSoundVolume);
+    } else {
+        world.sounds.volume = 1;  // Default volume if not saved
+    }
+
+    // Apply saved volume for background music if available, otherwise default to 1
+    if (savedBackgroundMusicVolume !== null) {
+        world.sounds.backgroundMusic.volume = parseFloat(savedBackgroundMusicVolume);
+    } else {
+        world.sounds.backgroundMusic.volume = 1;  // Default volume if not saved
+    }
+  } else {
+    console.warn("world.sounds not found, unable to load volume");
+  }
+}
+
   /**
  * Toggles sound on and off.
  */
@@ -112,12 +151,18 @@ document.addEventListener("DOMContentLoaded", () => {
     btnSound.addEventListener("touchend", (e) => {
       e.preventDefault();
       let img = document.getElementById("btnSound");
-      if(world.sounds.volume == 1){
+      if(world.sounds.volume == 1 && world.sounds.volume == 1){
         world.sounds.volume = 0;
+        world.sounds.backgroundMusic.volume = 0;
+        loadVolume(); 
+        updateVolume(0);
         img.src = "./img/gui/btn/sound_off.png";
       }
       else{
         world.sounds.volume = 1;
+        world.sounds.backgroundMusic.volume = 1;
+        loadVolume(); 
+        updateVolume(1);
         img.src = "./img/gui/btn/sound.png";
       }
     });
@@ -131,12 +176,16 @@ document.addEventListener("DOMContentLoaded", () => {
     btnSound.addEventListener("click", (e) => {
       e.preventDefault();
       let img = document.getElementById("btnSound");
-      if(world.sounds.volume == 1){
+      if(world.sounds.volume == 1 && world.sounds.volume == 1){
         world.sounds.volume = 0;
+        world.sounds.backgroundMusic.volume = 0;
+        updateVolume(0);
         img.src = "./img/gui/btn/sound_off.png";
       }
       else{
         world.sounds.volume = 1;
+        world.sounds.backgroundMusic.volume = 1;
+        updateVolume(1);
         img.src = "./img/gui/btn/sound.png";
       }
     });

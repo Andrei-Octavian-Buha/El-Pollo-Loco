@@ -13,7 +13,12 @@ class Sounds {
         "./sounds/snow-step-3-81065.mp3",
         "./sounds/chicken-cluking-type-3-293320.mp3",
         "./sounds/collect-5930.mp3",
+        "./sounds/collect-points-190037.mp3",
+        "./sounds/game-over-38511.mp3",
+        "./sounds/level-win-6416.mp3",
     ];
+
+    backgroundMusic = new Audio("./sounds/funky-and-jazzy-gang-loop-275533.mp3");
         /**
      * The volume level for sound playback (default is 1).
      * @type {number}
@@ -25,8 +30,14 @@ class Sounds {
      */
     constructor(){
         this.preloadSounds();
+        this.setupBackgroundMusic();
     }
 
+    setupBackgroundMusic() {
+        this.backgroundMusic.loop = true; // Set the background music to loop indefinitely
+        this.backgroundMusic.volume = this.volume; // Apply the volume setting
+    }
+    
         /**
      * Preloads all the audio files by creating Audio objects for each sound file.
      */
@@ -94,5 +105,16 @@ class Sounds {
     playCollectBottle() {
         this.playSoundForDuration(4, 200, this.volume);
     } 
+    playCollectCoins() {
+        this.playSoundForDuration(5, 150, this.volume);
+    } 
+    playGameOver() {
+        this.playSoundForDuration(6, 5000, this.volume);
+    } 
+    playGameWin() {
+        this.playSoundForDuration(7, 3000, this.volume);
+    } 
 }
+
+
 

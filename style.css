@@ -12,10 +12,10 @@ body {
   justify-content: center;
   align-items: center;
   background-image: url("./img/5_background/4279652.jpg");
-  background-size: cover;
+  /* background-size: cover; */
   background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
+  /* background-repeat: no-repeat; */ 
+  height: 100dvh;
   margin: 0;
 }
 
@@ -108,6 +108,8 @@ canvas {
 
 .desktop{
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .mobile{
   display: none;
@@ -115,8 +117,39 @@ canvas {
 .dNone{
   display: none;
 }
+.deviceTurn{
+  display: none;
+}
 
-@media only screen and (max-width: 1024px){
+@media (orientation: portrait) {
+  .deviceTurn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 100vh;   
+    background-color: #000;
+  }
+  .imgTurnDevice{
+    display: flex;
+    display: flex;
+    width: 100%;
+    height: 100vh;  
+  }
+}
+
+@media (min-width: 1034px) {
+  .deviceTurn {
+    display: none;          /* Ensure it's hidden even on larger screens */
+  }
+
+  .imgTurnDevice {
+    display: none;          /* Ensure it's hidden even on larger screens */
+  }
+}
+
+@media only screen and (max-width: 1280px){
   body {
     align-items: normal;
   }

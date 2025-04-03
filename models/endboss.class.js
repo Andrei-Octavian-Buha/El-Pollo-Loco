@@ -20,7 +20,7 @@ class Endboss extends MovableObject {
    * Y-coordinate of the end boss position.
    * @type {number}
    */
-  y = 240;
+  y = 255;
 
     /**
    * X-coordinate of the end boss position.
@@ -38,7 +38,7 @@ class Endboss extends MovableObject {
    * Health of the end boss.
    * @type {number}
    */
-  health = 100;
+  health = 100 ;
 
     /**
    * Speed of the end boss.
@@ -155,7 +155,6 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.x = x;
     this.world = world;
-    this.walk(); 
     this.playIntroAnimation();
     this.checkEndBossHealth();
   }
@@ -164,20 +163,22 @@ class Endboss extends MovableObject {
    * Makes the end boss move towards or away from the player.
    * The movement is based on the x-coordinate of the player.
    */
-  walk() {
+  animate() {
     setInterval(() => {
-      if(this.isAttacking){
-        return;
-      }else {
-        if(this.x > this.world.character.x + 20){
-          this.x -= this.speed;
-          this.otherDirection = false;
-        }else if(this.x < this.world.character.x - 20){
-          this.x += this.speed;
-          this.otherDirection = true;
+      if(!this.isDead()){
+        if(this.isGameOnPause()){
+          return;
+        }else{
+            if(this.x > this.world.character.x + 20){
+              this.x -= this.speed;
+              this.otherDirection = false;
+            }else if(this.x < this.world.character.x - 20){
+              this.x += this.speed;
+              this.otherDirection = true;
+            }
+          }
         }
-      }
-    }, 1000/30);
+    }, 1000 /30);
   }
 
     /**
@@ -189,12 +190,26 @@ class Endboss extends MovableObject {
     let intv = setInterval(() => { 
       if(i >= this.IMAGES_ALERT.length){
         clearInterval(intv);
-        this.playWalkAnimation();
+        this.endbosAnimation();
+        this.animate();
       }else{
         this.playAnimation(this.IMAGES_ALERT);
         i++;
       }
-    }, 334);
+    }, 150);
+  }
+
+  endbosAnimation() {
+    const animationSpeed = 100;  // Setează viteza animației în milisecunde
+    setInterval(() => {
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+      }else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      }else {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
+    }, animationSpeed); // Viteza este controlată de acest interval
   }
 
   /**
