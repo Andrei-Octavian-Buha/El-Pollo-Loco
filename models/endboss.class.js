@@ -251,13 +251,11 @@ class Endboss extends MovableObject {
    */
   endbossAtackMovemet(){ 
       if (this.health == 90 && this.moves[9] == false) {
-        this.spawnEnemies();
         this.moves[9] = true;
       }else if (this.health == 80 && this.moves[8] == false) {
         this.spawnEnemies();
         this.moves[8] = true;
       }else if (this.health == 70 && this.moves[7] == false) {
-        this.spawnEnemies();
         this.moves[7] = true;
       }else if (this.health == 60 && this.moves[6] == false) {
         this.spawnEnemies();
@@ -269,7 +267,6 @@ class Endboss extends MovableObject {
         this.spawnEnemies();
         this.moves[4] = true;
       }else if (this.health == 30 && this.moves[3] == false) {
-        this.spawnEnemies();
         this.moves[3] = true;
       }else if (this.health == 20 && this.moves[2] == false) {
         this.health = 30;
@@ -285,7 +282,7 @@ class Endboss extends MovableObject {
    * Spawns a random number of chickens at a random x position as additional enemies.
    */
   spawnEnemies(){
-    let iEnemies = Math.floor(Math.random() * 5) +1;
+    let iEnemies = Math.floor(Math.random() * 3) +1;
     let xEnemies = Math.floor(Math.random() * 101) + 600;
     let xForNewEnemies = this.x + xEnemies;
     for (let i = 0; i <= iEnemies;  i++) {

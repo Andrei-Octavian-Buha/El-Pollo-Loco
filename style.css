@@ -104,6 +104,13 @@ canvas {
 
 .allBtnStyle {
   height: 42px;
+  cursor: pointer;
+}
+.allBtnStyle:hover{
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 8px;
+
 }
 
 .desktop{
@@ -148,6 +155,7 @@ canvas {
     display: none;          /* Ensure it's hidden even on larger screens */
   }
 }
+
 
 @media only screen and (max-width: 1280px){
   body {

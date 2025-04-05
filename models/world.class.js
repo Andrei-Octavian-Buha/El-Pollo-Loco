@@ -47,6 +47,8 @@ gameOver = false;
 /** 
  * A flag indicating whether the player has won the game. */
 youLose = false;
+youWin = false;
+
 /** 
  * A flag indicating whether the game is in a paused state. */
 collisionWithEndBoss = false;
@@ -133,15 +135,16 @@ checkBottleEndboossCollision() {
   this.botles.forEach((bottle, bottleIndex) => {
     this.level.endbosss.forEach((enemy) => {
       if (bottle.isColliding(enemy)) {
-        this.sounds.playChickenDamage();
         if(enemy.health > 0){
+          this.sounds.playChickenDamage();
           enemy.hit();
           enemy.health -= 10;
           this.statusBar[3].setPertange(enemy.health);
           this.botles.splice(bottleIndex, 1);
-        }else{
-          if(this.level.endgame == true){
+          if(enemy.health <= 0){
+            this.youWin = true;
             this.gameOver = true;
+            this.gamePaused = true;
             this.sounds.backgroundMusic.pause();
             this.sounds.playGameWin();
           }
@@ -158,35 +161,41 @@ hitEnemies = {};
 checkCollisions() {
   this.level.enemies.forEach((enemy, enemyIndex) => {
     if (this.character.isColliding(enemy)){
-      
       if((this.character.isCollidinigFromTop(enemy) && this.character.speedY == -22.5) ||
           (this.character.isCollidinigFromTop(enemy) && this.character.speedY == -25)){
-        enemy.health -= 100;
-        this.sounds.playChickenDamage();
-      }
-      if (enemy.health > 0 && !this.hitEnemies[enemyIndex]) {
-        if(this.character.health > 0 ){ 
-          this.hitEnemies[enemyIndex] = true;
-          this.character.hit();
-          this.character.health -= 20;
-          this.statusBar[0].setPertange(this.character.health);
-          this.sounds.playTakeDamage();
-          this.checkInterval(450);
-          setTimeout(() => {
-            this.hitEnemies[enemyIndex] = false;
-          }, 2000);
-        } else {
-          this.gameOver = true;
-          this.youLose = true;
-          this.sounds.backgroundMusic.pause();
-          this.sounds.playGameOver();
+        if(enemy.health > 0){
+          this.sounds.playChickenDamage();
         }
+        enemy.health -= 100;
       }
+      this.dodamage(enemy,enemyIndex);
     }
-
   });
 }
 
+dodamage(enemy,enemyIndex){
+  if (enemy.health > 0 && !this.hitEnemies[enemyIndex]) {
+    this.hitEnemies[enemyIndex] = true;
+    this.character.hit();
+    this.character.health -= 10;
+    this.statusBar[0].setPertange(this.character.health);
+    this.sounds.playTakeDamage();
+    this.checkInterval(450);
+    this.checkIfCharacterIsDead();
+    setTimeout(() => {
+      this.hitEnemies[enemyIndex] = false;
+    }, 2000);
+  }
+}
+
+checkIfCharacterIsDead(){
+  if(this.character.health == 0){
+    this.gameOver = true;
+    this.youLose = true;
+    this.sounds.backgroundMusic.pause();
+    this.sounds.playGameOver();
+  }
+}
 
 /**
  * Checks collisions between the character and the end boss.
@@ -194,23 +203,13 @@ checkCollisions() {
 checkEndbossCollisons(){
   this.level.endbosss.forEach((enemy)=>{
     if(this.character.isColliding(enemy) ){
-      if(this.character.isAboveGround() && this.collisionWithEndBoss){
-        enemy.health -= 10;
-        this.statusBar[3].setPertange(enemy.health);
-        this.collisionWithEndBoss = false; 
-      }else if(enemy.health > 0){
-        if(this.character.health >= 0){
-          this.character.hit(); 
-          this.character.health -= 1;
-          this.statusBar[0].setPertange(this.character.health);
-          this.sounds.playTakeDamage();
-          this.checkInterval(450); 
-        }else {
-          this.gameOver = true;
-          this.youLose = true;
-          this.sounds.backgroundMusic.pause();
-          this.sounds.playGameOver();
-        }
+      if(enemy.health > 0 && this.character.health >= 0){
+        this.character.hit(); 
+        this.character.health -= 1;
+        this.statusBar[0].setPertange(this.character.health);
+        this.sounds.playTakeDamage();
+        this.checkInterval(450); 
+        this.checkIfCharacterIsDead()
       }
     }
   });
@@ -223,10 +222,8 @@ draw() {
   if(this.gameOver){
     if(this.youLose){
       this.ui.youLose();
-    }else {
-
+    }else if(this.youWin){
       this.ui.youWin();
-      
     }
   }else{
     if (this.gamePaused) {
@@ -353,13 +350,12 @@ checkInterval(x){
  * Resets the game to its initial state.
  */
 restartGame() {
-  if(this.character.health == 0 || this.ui.currentUI == 'exit'){
+  if(this.ui.currentUI == 'exit'){
     this.ui.currentUI = 'start';
-    this.sounds.backgroundMusic.pause();
     this.gameOver = false;
-    this.gamePaused = true;
+    this.gamePaused = false;
     this.youLose = false;
-    this.level.endgame = false;
+    this.youWin = false;
     this.botles = [];
     this.camera_x = 350;
     this.character.x = 350;
@@ -372,11 +368,12 @@ restartGame() {
     this.statusBar[1].setPertange(this.character.botleLoot); 
     this.statusBar[2].setPertange(this.character.coinsLoot); 
     this.statusBar.splice(3,1);[]
+    this.level.endgame = false;
     this.level.enemies = [];
     this.level.endbosss = [];
     this.level.coins = [];
     this.level.loot = [];
-    this.level.addEnemiesToGame();
+    this.level.addRandomEnemies();
     this.level.addBottleToLevel();
     this.level.addCoinsToLevel();
     this.draw();

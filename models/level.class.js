@@ -112,45 +112,33 @@ class Level {
     this.coins = coins;
     this.backgroundObjects = backgroundObjects;
     this.world = world;
-    this.addEnemiesToGame();
+    this.addRandomEnemies();
     this.addBottleToLevel();
     this.addCoinsToLevel();
   }
 
-      /**
-     * Adds enemies to the game. If the end game flag is true, the end boss is added instead.
-     * Enemies are added at a regular interval.
-     */
-  addEnemiesToGame() {
-      let endGameBossInterval = setInterval(() => {
-      if(this.endgame == true) {
-        this.addEndBossToGame();
-        clearInterval(endGameBossInterval);
-      } else {
-        this.addRandomEnemies();
-      }
-    }, 1000/30);
-  }
 
       /**
      * Adds random enemies to the level at a set interval.
      * Enemies are only spawned when the character's x position is greater than 350.
      */
   addRandomEnemies(){
-    if(this.spawnEnemies) return;
+    if (this.spawnEnemies) {
+      clearInterval(this.spawnEnemies);
+  }
      this.spawnEnemies = setInterval(() => {
         this.characterX = this.world.character.x;
         if(this.isGameOnPause()){
           return;
-        }else if(this.world && this.world.character.health > 0){
+        }else if(this.world && this.world.character.health > 0 && this.world.character.x > 350){
           let randomEnemyType = Math.random() < 0.3 ? Chicken : BabyChicken;
           let mobs = new randomEnemyType(this.characterX, this.world);
-          if(this.world.character.x > 350){
             this.enemies.push(mobs);
-          }
         }
-        if(this.world.character.x >= 5500){
+        if(this.world.character.x >= 5000){
           this.endgame = true;
+          this.addEndBossToGame();
+          clearInterval(this.spawnEnemies);
         }
     }, 1000);
   }
@@ -160,7 +148,6 @@ class Level {
   * Clears the current intervals for spawning enemies and the end boss.
   */
   addEndBossToGame(){
-    this.spawnEnemies = null;
     this.endbosss.push(new Endboss(this.characterX + 750, this.world)); 
     if(this.world){
       this.world.testLevelToWorld();
@@ -174,7 +161,7 @@ class Level {
      */
   addBottleToLevel(){
     for (let i = 0; i <= 4; i++) {
-      let x = this.lastX + 800 + Math.random() * (6000-400);
+      let x = this.lastX + 800 + Math.random() * (5500-400);
       this.loot.push(new BotleLoot(x));
     }
   }
@@ -186,7 +173,7 @@ class Level {
      */
   addCoinsToLevel(){
     for (let i = 0; i <= 50; i++) {
-      let x = this.lastX + 800 + Math.random() * (6000-400);
+      let x = this.lastX + 800 + Math.random() * (5500-400);
       let y = this.lastY - Math.random() * 80;
       this.coins.push(new CoinsLoot(x, y));
     }

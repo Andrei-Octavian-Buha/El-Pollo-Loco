@@ -96,12 +96,14 @@ paths = {
         this.currentUI = 'exit';
         this.world.restartGame();
         this.world.gamePaused = false;
+        this.world.sounds.backgroundMusic.play();
         document.getElementById("startGameLayoutId").style.display = "none";
         document.getElementById("mobileControlsBarId").style.display = "flex";
         document.getElementById("guiId").style.display = "flex";
         document.getElementById("gameOverID").classList.add("dNone");
       } , 1000);
     });
+    
     document.getElementById("backToMenu").addEventListener("click", (e) => {
       e.preventDefault();
       this.currentUI = "exit";
@@ -158,6 +160,7 @@ paths = {
         document.getElementById("guiId").style.display = "none";
         document.getElementById("mobileControlsBarId").style.display = "none";
         document.getElementById("impressumButtonId").style.display = "flex";
+        this.world.sounds.backgroundMusic.pause();
         break;
       default:
         break;
