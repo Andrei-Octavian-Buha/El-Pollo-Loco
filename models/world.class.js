@@ -140,6 +140,7 @@ checkBottleEndboossCollision() {
           enemy.hit();
           enemy.health -= 10;
           this.statusBar[3].setPertange(enemy.health);
+          bottle.splash();
           this.botles.splice(bottleIndex, 1);
           if(enemy.health <= 0){
             this.youWin = true;
@@ -161,6 +162,7 @@ hitEnemies = {};
 checkCollisions() {
   this.level.enemies.forEach((enemy, enemyIndex) => {
     if (this.character.isColliding(enemy)){
+
       if((this.character.isCollidinigFromTop(enemy) && this.character.speedY == -22.5) ||
           (this.character.isCollidinigFromTop(enemy) && this.character.speedY == -25)){
         if(enemy.health > 0){
@@ -205,8 +207,9 @@ checkEndbossCollisons(){
     if(this.character.isColliding(enemy) ){
       if(enemy.health > 0 && this.character.health >= 0){
         this.character.hit(); 
-        this.character.health -= 1;
+        this.character.health -= 0.5;
         this.statusBar[0].setPertange(this.character.health);
+
         this.sounds.playTakeDamage();
         this.checkInterval(450); 
         this.checkIfCharacterIsDead()

@@ -89,12 +89,15 @@ class ThrowableObject extends MovableObject {
         this.speedY = this.distance;    
         this.applyGravity();
         setInterval(() => {
-                this.playAnimation(this.IMAGES_BOTTLE_ROTATION);
             if (!this.otherDirection) {
-            this.x += this.distance;
-            } else {
-            this.x -= this.distance;
+                this.x += this.distance;
+                } else {
+                this.x -= this.distance;
             }
+            this.playAnimation(this.IMAGES_BOTTLE_ROTATION);
         }, 25);
+    }
+    splash() {
+            this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
     }
 }

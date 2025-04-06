@@ -12,9 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   background-image: url("./img/5_background/4279652.jpg");
-  /* background-size: cover; */
   background-position: center;
-  /* background-repeat: no-repeat; */ 
   height: 100dvh;
   margin: 0;
 }
@@ -138,8 +136,8 @@ canvas {
     height: 100vh;   
     background-color: #000;
   }
+
   .imgTurnDevice{
-    display: flex;
     display: flex;
     width: 100%;
     height: 100vh;  
@@ -157,16 +155,24 @@ canvas {
 }
 
 
+@media (pointer: coarse) {
+  /* Afișează acest element doar pe dispozitive cu touch */
+  .mobile{
+    display: flex;
+  }
+}
+
 @media only screen and (max-width: 1280px){
   body {
     align-items: normal;
   }
-  .mobile{
-    display: flex;
-  }
+
+
+
   .desktop{
     display: none;
   }
+
   canvas{
     width: 100%;
     border: 0px;
@@ -177,12 +183,15 @@ canvas {
   body {
     align-items: normal;
   }
+
   .desktop{
     display: none;
   }
+
   .mobile{
     display: flex;
   }
+  
   canvas{
     height: 100vh;
     border: 0px;

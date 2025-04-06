@@ -7,19 +7,19 @@ class BabyChicken extends MovableObject {
    * The height of the chicken.
    * @type {number}
    */
-  height = 55;
+  height = 45;
 
     /**
    * The width of the chicken.
    * @type {number}
    */
-  width = 32;
+  width = 45;
 
     /**
    * The y-coordinate of the chicken.
    * @type {number}
    */
-  y = 445;
+  y = 450;
 
     /**
    * The health of the chicken.

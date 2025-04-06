@@ -98,8 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
   resummeGame2();
   clickOnControls();
   exitGame();
-  sound();
   fullscreen();
+  sound();
 });
 
 /**
@@ -118,29 +118,34 @@ function updateVolume(newVolume) {
   localStorage.setItem('backgroundMusicVolume', world.sounds.backgroundMusic.volume);
 }
 
+  /**
+ * Loads the volume settings from localStorage and sets the sound volume accordingly.
+ */
 function loadVolume() {
-  // Ensure world.sounds exists to prevent errors
   if (world && world.sounds) {
-    // Retrieve saved volume levels from localStorage
     const savedSoundVolume = localStorage.getItem('soundVolume');
-    const savedBackgroundMusicVolume = localStorage.getItem('backgroundMusicVolume');
 
-    // Apply saved volume for sound if available, otherwise default to 1
     if (savedSoundVolume !== null) {
-        world.sounds.volume = parseFloat(savedSoundVolume);
+        world.sounds.volume = savedSoundVolume;
+        world.sounds.backgroundMusic.volume = savedSoundVolume;
+        setUpdateImg(savedSoundVolume);
     } else {
-        world.sounds.volume = 1;  // Default volume if not saved
+        world.sounds.volume = 1; 
+        world.sounds.backgroundMusic.volume = 1;
+        setUpdateImg(1);
     }
-
-    // Apply saved volume for background music if available, otherwise default to 1
-    if (savedBackgroundMusicVolume !== null) {
-        world.sounds.backgroundMusic.volume = parseFloat(savedBackgroundMusicVolume);
-    } else {
-        world.sounds.backgroundMusic.volume = 1;  // Default volume if not saved
-    }
-  } else {
-    console.warn("world.sounds not found, unable to load volume");
+    
   }
+}
+
+  /**
+ * Set image for the sound button based on the key value.
+ */
+
+function setUpdateImg(key){
+  let images = [ "./img/gui/btn/sound_off.png", "./img/gui/btn/sound.png"];
+  let img = document.getElementById("btnSound");
+  img.src = images[key];
 }
 
   /**
@@ -151,7 +156,7 @@ function loadVolume() {
     btnSound.addEventListener("touchend", (e) => {
       e.preventDefault();
       let img = document.getElementById("btnSound");
-      if(world.sounds.volume == 1 && world.sounds.volume == 1){
+      if(world.sounds.volume == 1){
         world.sounds.volume = 0;
         world.sounds.backgroundMusic.volume = 0;
         loadVolume(); 
@@ -176,7 +181,7 @@ function loadVolume() {
     btnSound.addEventListener("click", (e) => {
       e.preventDefault();
       let img = document.getElementById("btnSound");
-      if(world.sounds.volume == 1 && world.sounds.volume == 1){
+      if(world.sounds.volume == 1){
         world.sounds.volume = 0;
         world.sounds.backgroundMusic.volume = 0;
         updateVolume(0);
